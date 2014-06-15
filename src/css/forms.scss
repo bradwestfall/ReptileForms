@@ -1,0 +1,99 @@
+@mixin field-outline-color($color: #52A9EC, $background-color: #FFFFFF) {
+	background-color: $background-color;
+	border-color: $color;
+	box-shadow: 0px 0px 5px 0px rgba($color, 0.6);
+}
+
+@mixin field-outline() {
+	font-size: 10pt;
+	border: 1px solid #DDDDDD;
+	background-color: #FFFFFF;
+	padding: 4px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	&:focus {
+		outline: none;
+		@include field-outline-color;
+	}
+}
+
+.standard-form {
+
+	// Submitting form
+	&.submitting button[type="submit"]::before {
+		@include font-awesome('\f013');
+		@include spin(5s);
+		margin-right: 3px;
+
+	}
+
+	// Successful form
+	&.success button[type="submit"]::before {
+		@include font-awesome('\f00c');
+		margin-right: 3px;
+	}
+
+	// Specific Fields
+	.form-field {
+
+		// Field Outlines
+		&.text input,
+		&.select select {
+			@include field-outline;
+			width: 100%;
+		}
+
+		&.checkbox-group {
+			> .input {
+				label {
+					margin-right: 10px;
+					input {
+						margin-right: 5px;
+					}
+				}
+			}
+		}
+
+	}
+
+	// Structure
+	.form-field {
+		@include spacing;
+		@include clearfix;
+
+		> .title {
+			display: block;
+			padding-right: 10px;
+			float: left;
+			width: 180px;
+			font-weight: bold;
+			font-size: 10pt;
+			text-align: right;
+			margin-top: 3px;
+		}
+
+		> .input {
+			margin-left: 180px;
+			max-width: 200px;
+		}
+
+		> .comments {
+			margin-left: 180px;
+			color: #777777;
+			font-size: 10pt;
+			font-style: italic;
+		}
+
+		&.required {
+
+			> .title {
+				&:before {
+					content: '* ';
+				}
+			}
+
+		}
+
+	}
+
+}

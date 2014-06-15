@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Sample</title>
+
+	<!-- Required Assets -->
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="../src/forms.js"></script>
+
+	<!-- Sample Usage -->
+	<script>
+	$(function() {
+
+		// Form Plugin
+		$('form').form({
+
+			// On Error
+			validationError: function(err) {
+				console.log(err);
+			},
+
+			// On Before Form Submit
+			beforeSubmit: function() {
+				this.form.addClass('submitting');
+			},
+
+			// On After Submit
+			afterSubmit: function() {
+				this.form.removeClass('submitting');
+			},
+
+			// On After Success
+			afterSuccess: function() {
+				this.form.addClass('success');
+			}
+
+		}).show();
+
+
+	});
+	</script>
+
+</head>
+<body>
+
+	<form novalidate="novalidate" method="POST" action="process_form.php" style="display: none;">
+		<input type="hidden" name="process_form" value="true" required="required">
+
+		<input type="email" name="email" title="Email" required maxlength="100" data-exp-name="email">
+		<input type="password" name="password" title="Password" required maxlength="20" data-exp-name="password">
+		
+		<div class="field-input">
+			<span>Agree to terms</span>
+		</div>
+
+		<button type="submit">Login</button>
+		
+	</form>
+	
+</body>
+</html>
