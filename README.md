@@ -43,10 +43,11 @@ var form = new ReptileForm('.reptile-form', {
 ```
 ### Basic Fields
 Add `<input>` tags with the following attributes
-#### name (required)
- Will be used to identify fields
-#### title
- Will be used as a visual title and also for error messages
+- `name` Will be used to identify fields (attribute is required)
+- `type` Type of field (W3)
+- `title` Will be used as a visual title and also for error messages
+- `required` If the field is required (w3)
+
 
 ### Custom Fields
 Documentation coming soon
