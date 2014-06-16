@@ -44,8 +44,9 @@ var form = new ReptileForm('.reptile-form', {
 ### Basic Fields
 Add `<input>` tags with the following attributes
 #### name (required)
-
-
+ Will be used to identify fields
+#### title
+ Will be used as a visual title and also for error messages
 
 ### Custom Fields
 Documentation coming soon
