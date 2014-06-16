@@ -19,60 +19,45 @@
 
 .standard-form {
 
-	// Submitting form
-	&.submitting button[type="submit"]::before {
-		@include font-awesome('\f013');
-		@include spin(5s);
-		margin-right: 3px;
-
-	}
-
-	// Successful form
-	&.success button[type="submit"]::before {
-		@include font-awesome('\f00c');
-		margin-right: 3px;
-	}
-
 	// Specific Fields
-	.form-field {
+	.field {
 
-		// Field Outlines
-		&.text input,
-		&.select select {
-			@include field-outline;
-			width: 100%;
-		}
+		// // Field Outlines
+		// &.text input,
+		// &.select select {
+		// 	@include field-outline;
+		// 	width: 100%;
+		// }
 
-		&.checkbox-group {
-			> .input {
-				label {
-					margin-right: 10px;
-					input {
-						margin-right: 5px;
-					}
-				}
-			}
-		}
+		// &.checkbox-group {
+		// 	> .input {
+		// 		label {
+		// 			margin-right: 10px;
+		// 			input {
+		// 				margin-right: 5px;
+		// 			}
+		// 		}
+		// 	}
+		// }
 
 	}
 
 	// Structure
-	.form-field {
-		@include spacing;
-		@include clearfix;
+	.field {
+		margin: 10px 0;
 
 		> .title {
-			display: block;
 			padding-right: 10px;
 			float: left;
 			width: 180px;
-			font-weight: bold;
-			font-size: 10pt;
+			box-sizing: border-box;
+			//font-weight: bold;
+			//font-size: 10pt;
 			text-align: right;
-			margin-top: 3px;
+			//margin-top: 3px;
 		}
 
-		> .input {
+		> .field-input {
 			margin-left: 180px;
 			max-width: 200px;
 		}

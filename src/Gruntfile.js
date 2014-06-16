@@ -3,43 +3,30 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-    
+ 
     uglify: {
-      options: {
-        banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
-      },
-      build: {
-        src: 'javascript/main.js',
-        dest: 'javascript/main.min.js'
+      my_target: {
+        files: {
+          '../dist/reptileforms.min.js': ['source.js']
+        }
       }
     },
 
     sass: {
       dist: {
         options: {
-          //style: 'compressed'
+          style: 'compressed'
         },
         files: {
-          'css/styles.css': 'css/styles.scss'
-        }
-      }
-    },
-
-    cssmin: {
-      combine: {
-        files: {
-          'css/styles.css': ['css/styles.css']
+          'styles/reptileforms.min.css': 'styles/source.scss'
         }
       }
     },
 
     autoprefixer: {
-      options: {
-        // Task-specific options go here.
-      },
       single_file: {
-        src: 'css/styles.css',
-        dest: 'css/styles.css'
+        src: 'styles/reptileforms.min.css',
+        dest: '../dist/reptileforms.min.css'
       }
     },
 
@@ -48,14 +35,10 @@ module.exports = function(grunt) {
         files: '**/*.scss',
         tasks: ['sass', 'autoprefixer']
       },
-      grunt: {
-        files: ['Gruntfile.js']
+      scripts: {
+        files: '*.js',
+        tasks: ['uglify']
       }
-      // ,
-      // javascript: {
-      //   files: '**/*.js',
-      //   tasks: ['uglify']
-      // }
     }
 
   });
