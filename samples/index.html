@@ -2,41 +2,43 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Sample</title>
+	<title>ReptileForms Sample Code</title>
 
-	<!-- Required Assets -->
+	<!-- Optional Styles -->
+	<link rel="stylesheet" href="../dist/reptileforms.min.css">
+
+	<!-- Required JavaScript -->
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-	<script src="../src/forms.js"></script>
+	<script src="../dist/reptileforms.min.js"></script>
 
 	<!-- Sample Usage -->
 	<script>
 	$(function() {
 
-		// Form Plugin
-		$('form').form({
-
-			// On Error
+		// Use Reptile Forms
+		var form = new ReptileForm('form', {
 			validationError: function(err) {
 				console.log(err);
 			},
-
-			// On Before Form Submit
 			beforeSubmit: function() {
-				this.form.addClass('submitting');
+				this.el.find('input[name="process_form"]').remove();
+				this.el.addClass('submitting');
 			},
-
-			// On After Submit
-			afterSubmit: function() {
-				this.form.removeClass('submitting');
-			},
-
-			// On After Success
-			afterSuccess: function() {
-				this.form.addClass('success');
+			submitSuccess: function(data) {
+				this.el.addClass('success');
+				$('body').prepend('<p>Success</p>');
 			}
+		});
 
-		}).show();
+		// Custom Validation
+		form.validateTerms = function(formField) {
+			if (!formField.find('.selected').length) {
+				this.addError('Terms', 'You must agree to terms');
+			}
+		}
 
+		// Show Form
+		form.el.show();
 
 	});
 	</script>
@@ -44,17 +46,17 @@
 </head>
 <body>
 
-	<form novalidate="novalidate" method="POST" action="process_form.php" style="display: none;">
-		<input type="hidden" name="process_form" value="true" required="required">
+	<form class="standard-form" action="response.json" novalidate="novalidate" method="POST" style="display: none;">
+		<input type="hidden" name="process_form" value="true" required>
 
 		<input type="email" name="email" title="Email" required maxlength="100" data-exp-name="email">
 		<input type="password" name="password" title="Password" required maxlength="20" data-exp-name="password">
 		
-		<div class="field-input">
-			<span>Agree to terms</span>
+		<div class="field-input" data-name="terms" data-custom-validation="validateTerms">
+			<span class="selected">Agree to terms</span>
 		</div>
 
-		<button type="submit">Login</button>
+		<button>Login</button>
 		
 	</form>
 	
