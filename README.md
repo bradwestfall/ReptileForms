@@ -42,12 +42,10 @@ var form = new ReptileForm('.reptile-form', {
 </form>
 ```
 ### Basic Fields
-Add `<input>` tags with the following attributes
-- `name` Will be used to identify fields (attribute is required)
-- `type` Type of field (W3)
+Use `<input>`, `<select>`, or `<textarea>` tags with standard attribtues such as `name` (required), `type`, `reqired`, `maxlength`, etc...
+Also use these attributes for additional ReptileForms functionality:
 - `title` Will be used as a visual title and also for error messages
-- `required` If the field is required (w3)
-
+- `data-exp-name` The name of the regular expression to use in validation
 
 ### Custom Fields
 Documentation coming soon
