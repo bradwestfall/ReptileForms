@@ -2,8 +2,11 @@
 This code requires jQuery `^1.7.0`
 
 ### Features
+- Easy Callbacks
 - Built-in validation
-- OOCSS Approach (Structure Styles Supplied)
+-- Easily add custom regular expressions
+- OOCSS Approach
+-- Structure Styles Supplied
 - Easy-use common fields
 - Easily build custom fields
 
