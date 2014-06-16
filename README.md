@@ -8,14 +8,7 @@ This code requires jQuery `^1.7.0`
 - Easily build custom fields
 
 ### Basic Usage
-Starting HTML
-```html
-<form class="reptile-form" action="/process" method="POST">
-	<input type="text" name="first-name" title="FirstName" required maxlength="20">
-	<button>Login</button>
-</form>
-```
-Basic Usage
+####Basic Usage
 ```js
 var form = new ReptileForm('.reptile-form', {
 	validationError: function(err) {
@@ -26,7 +19,14 @@ var form = new ReptileForm('.reptile-form', {
 	}
 });
 ```
-Resulting DOM
+####Starting HTML
+```html
+<form class="reptile-form" action="/process" method="POST">
+	<input type="text" name="first-name" title="FirstName" required maxlength="20">
+	<button>Login</button>
+</form>
+```
+####Resulting DOM
 ```html
 <form class="reptile-form" action="/process" method="POST">
 	<div class="field email required text">
@@ -38,5 +38,4 @@ Resulting DOM
 	<button>Login</button>
 </form>
 ```
-
-
+### Custom Fields
