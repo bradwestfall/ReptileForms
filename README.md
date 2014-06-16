@@ -1,5 +1,6 @@
 ## Getting Started
-
+Reptile forms
+This code requires jQuery `^1.7.0`
 ```js
 var form = new ReptileForm('.reptile-form', {
 	validationError: function(err) {
