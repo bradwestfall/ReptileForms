@@ -32,7 +32,7 @@ var form = new ReptileForm('.reptile-form', {
 ####Resulting DOM
 ```html
 <form class="reptile-form" action="/process" method="POST">
-	<div class="field email required text">
+	<div class="field first-name required text">
 		<div class="title">First Name</div>
 		<div class="field-input">
 			<input type="text" name="first-name" maxlength="20">
