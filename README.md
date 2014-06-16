@@ -1,4 +1,4 @@
-## Getting Started
+## Getting Started v0.1.0
 This code requires jQuery `^1.7.0`
 
 ### Features
