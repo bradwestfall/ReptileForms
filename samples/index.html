@@ -16,7 +16,7 @@
 	$(function() {
 
 		// Use Reptile Forms
-		var form = new ReptileForm('form', {
+		var form = new ReptileForm('.reptile-form', {
 			validationError: function(err) {
 				console.log(err);
 			},
@@ -46,7 +46,7 @@
 </head>
 <body>
 
-	<form class="standard-form" action="response.json" novalidate="novalidate" method="POST" style="display: none;">
+	<form class="reptile-form" action="response.json" novalidate="novalidate" method="POST" style="display: none;">
 		<input type="hidden" name="process_form" value="true" required>
 
 		<input type="email" name="email" title="Email" required maxlength="100" data-exp-name="email">
