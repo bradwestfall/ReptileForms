@@ -1,6 +1,8 @@
 ## Getting Started
-Reptile forms
 This code requires jQuery `^1.7.0`
+
+### Basic Usage
+
 ```js
 var form = new ReptileForm('.reptile-form', {
 	validationError: function(err) {
@@ -19,3 +21,9 @@ var form = new ReptileForm('.reptile-form', {
 	<button>Login</button>
 </form>
 ```
+
+### Features
+- Built-in validation
+- OOCSS Approach (Structure Styles Supplied)
+- Easy-use common fields
+- Easily build custom fields
