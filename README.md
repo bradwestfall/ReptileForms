@@ -41,4 +41,11 @@ var form = new ReptileForm('.reptile-form', {
 	<button>Login</button>
 </form>
 ```
+### Basic Fields
+Add `<input>` tags with the following attributes
+#### name (required)
+
+
+
 ### Custom Fields
+Documentation coming soon
