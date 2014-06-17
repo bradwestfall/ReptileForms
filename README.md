@@ -20,7 +20,7 @@ $ bower install ReptileForms --save
  - Custom fields can include "composite fields"
 
 ## Basic Usage
-###Basic Usage
+###JS
 ```js
 var form = new ReptileForm('.reptile-form', {
 	validationError: function(err) {
@@ -31,7 +31,7 @@ var form = new ReptileForm('.reptile-form', {
 	}
 });
 ```
-###Starting HTML
+###Initial HTML
 ```html
 <form class="reptile-form" action="/process" method="POST">
 	<input type="text" name="first-name" title="First Name" required maxlength="20">
