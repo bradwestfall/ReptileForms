@@ -1,8 +1,8 @@
 {
-  "name": "forms",
-  "version": "0.0.0",
+  "name": "ReptileForms",
+  "version": "0.2.1",
   "description": "",
-  "main": "forms.js",
+  "main": "reptileforms.min.js",
   "devDependencies": {
     "grunt": "~0.4.5",
     "grunt-contrib-jshint": "~0.10.0",
