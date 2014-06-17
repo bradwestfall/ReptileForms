@@ -1,4 +1,4 @@
-# Getting Started v0.1.0
+# ReptileForms v0.1.0
 > Easy-to-use unopinionated forms and validation
 
 This code requires jQuery `^1.7.0`
