@@ -1,0 +1,29 @@
+@mixin reptile-forms-structure {
+	.field {
+		margin: 10px 0;
+
+		> .title {
+			padding-right: 10px;
+			float: left;
+			width: 180px;
+			box-sizing: border-box;
+			text-align: right;
+		}
+
+		> .field-input {
+			margin-left: 180px;
+			max-width: 200px;
+		}
+
+		&.required {
+
+			> .title {
+				&:before {
+					content: '* ';
+				}
+			}
+
+		}
+
+	}
+}
