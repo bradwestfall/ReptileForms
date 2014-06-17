@@ -4,6 +4,13 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
  
+    copy: {
+      main: {
+        src: 'source.js',
+        dest: '../dist/reptileforms.js',
+      }
+    },
+
     uglify: {
       my_target: {
         files: {
@@ -37,13 +44,14 @@ module.exports = function(grunt) {
       },
       scripts: {
         files: '*.js',
-        tasks: ['uglify']
+        tasks: ['uglify', 'copy']
       }
     }
 
   });
 
   // Load the plugin that provides the "uglify" task.
+  grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-autoprefixer');

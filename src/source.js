@@ -61,7 +61,7 @@
 				if (!self.settings.useAjax) return true;
 				
 				// Submit Form
-				self.submitForm.call(self, self.el.attr('action'), self.formValues);
+				self.submitForm.call(self, self.el.attr('action'), self.getValues());
 				return false;
 
 			} else {
@@ -211,18 +211,20 @@
 		// Start New Form Validation
 		self.el.find('.field').each(function() {
 			var formField = $(this);
+			var title = formField.data('title');
 
 			// Custom Validation
 			var customValidation = formField.data('custom-validation');
 			if (customValidation && $.isFunction(self[customValidation])) {
-				self[customValidation](formField);
+				var value = self[customValidation](formField);
+				self.storeValue(title, value);
 				return;
 			}
 
 			// Common Validation
 			var value = self.getFieldValue(formField);
-			var title = formField.data('title')
-			var isRequired = formField.hasClass('required') || formField.attr('required');
+			var isRequired = Boolean(formField.hasClass('required')) || Boolean(formField.attr('required'));
+			self.storeValue(title, value);
 
 			// Validate Requiredness
 			if (isRequired && !value) {
