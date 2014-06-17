@@ -1,4 +1,4 @@
-;(function($, window, document, undefined) {
+(function($, window, document, undefined) {
 	ReptileForm = function(el, settings) {
 
 		// Setup
@@ -50,12 +50,14 @@
 
 		// Submit Form
 		self.el.on('submit', function() {
-			if (self.validate()) {
 
-				// Before Submit
-				if ($.isFunction(self.settings.beforeSubmit)) {
-					if (false === self.settings.beforeSubmit.call(self)) return false;
-				}
+			// Before Submit
+			if ($.isFunction(self.settings.beforeSubmit)) {
+				if (false === self.settings.beforeSubmit.call(self)) return false;
+			}
+
+			// Validate
+			if (self.validate()) {
 
 				// Use browser's default submit
 				if (!self.settings.useAjax) return true;
@@ -64,6 +66,7 @@
 				self.submitForm.call(self, self.el.attr('action'), self.getValues());
 				return false;
 
+			// Validation Failed
 			} else {
 				return false;
 			}
