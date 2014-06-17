@@ -4,9 +4,9 @@
 This code requires jQuery `^1.7.0`
 
 ## Install
-``sh
+```sh
 $ bower install ReptileForms --save
-``
+```
 
 ## Features
 - AJAX Post submissions by default
