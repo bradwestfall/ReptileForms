@@ -215,19 +215,20 @@
 		self.el.find('.field').each(function() {
 			var formField = $(this);
 			var title = formField.data('title');
+			var name = formField.data('name');
 
 			// Custom Validation
 			var customValidation = formField.data('custom-validation');
 			if (customValidation && $.isFunction(self[customValidation])) {
 				var value = self[customValidation](formField);
-				self.storeValue(title, value);
+				self.storeValue(name, value);
 				return;
 			}
 
 			// Common Validation
 			var value = self.getFieldValue(formField);
 			var isRequired = Boolean(formField.hasClass('required')) || Boolean(formField.attr('required'));
-			self.storeValue(title, value);
+			self.storeValue(name, value);
 
 			// Validate Requiredness
 			if (isRequired && !value) {
