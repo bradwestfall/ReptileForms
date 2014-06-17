@@ -300,8 +300,8 @@
 			success: function(data) {
 				if ($.isFunction(self.settings.submitSuccess)) { self.settings.submitSuccess.call(self, data); }
 			},
-			error: function() {
-				if ($.isFunction(self.settings.submitError)) { self.settings.submitError.call(self); }
+			error: function(xhr, settings, thrownError) {
+				if ($.isFunction(self.settings.submitError)) { self.settings.submitError.call(self, xhr, settings, thrownError); }
 			}
 		});
 	}
