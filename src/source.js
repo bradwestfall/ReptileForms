@@ -4,6 +4,7 @@
 		// Setup
 		var self = this;
 		self.el = $(el);
+		if (!self.el.length) { return false; }
 	
 		// Settings
 		self.settings = $.extend({
