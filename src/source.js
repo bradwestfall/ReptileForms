@@ -10,19 +10,20 @@
 			method: 'POST',
 			action: window.location,
 			useAjax: true,
-			reptileStyleValidation: true,
+			reptileValidation: true,
 			expressions: {
 				"email": {"rule":"\/^[a-zA-Z0-9._-]+@[\\.a-zA-Z0-9-]+\\.[a-zA-Z.]{2,5}$\/","msg":"Invalid Email."},
 				"password": {"rule":"\/^[\\040-\\176]{6,30}$\/","msg":"Invalid Password, Must be between 6 and 30 characters."}
 			},
+			ready: function() {},
 			validationError: function() {},
 			beforeSubmit: function() {},
 			submitSuccess: function() {},
 			submitError: function() {}
 		}, settings);
 
-		
-		if (self.settings.reptileStyleValidation) self.el.attr('novalidate', 'novalidate');
+		// Use Reptile Validation
+		if (self.settings.reptileValidation) self.el.attr('novalidate', 'novalidate');
 
 		// Reset Errors and Values
 		self.clearErrors();
@@ -66,6 +67,9 @@
 				return false;
 			}
 		});
+
+		// Ready
+		if ($.isFunction(self.settings.ready)) { self.settings.ready.call(self); }
 
 	}
 

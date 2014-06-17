@@ -17,6 +17,9 @@
 
 		// Use Reptile Forms
 		var form = new ReptileForm('.reptile-form', {
+			ready: function() {
+				this.el.show();
+			},
 			validationError: function(err) {
 				console.log(err);
 			},
@@ -36,9 +39,6 @@
 				this.addError('Terms', 'You must agree to terms');
 			}
 		}
-
-		// Show Form
-		form.el.show();
 
 	});
 	</script>
