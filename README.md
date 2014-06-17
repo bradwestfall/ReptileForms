@@ -2,13 +2,15 @@
 This code requires jQuery `^1.7.0`
 
 ### Features
-- Easy Callbacks
+- AJAX Post submissions by default
+ - Easy callbacks to override
 - Built-in validation
  - Easily add custom regular expressions
 - OOCSS Approach
  - Structure Styles Supplied
-- Easy-use common fields
-- Easily build custom fields
+- Just use common `<input>` fields as usual
+- Easily build custom fields with custom validation
+ - Custom fields can include "composite fields"
 
 ### Basic Usage
 ####Basic Usage
