@@ -15,15 +15,5 @@
 			max-width: 200px;
 		}
 
-		&.required {
-
-			> .title {
-				&:before {
-					content: '* ';
-				}
-			}
-
-		}
-
 	}
 }

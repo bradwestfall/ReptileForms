@@ -6,8 +6,8 @@ module.exports = function(grunt) {
  
     copy: {
       main: {
-        src: 'source.js',
-        dest: '../dist/reptileforms.js',
+        src: 'src/source.js',
+        dest: 'dist/reptileforms.js',
       }
     },
 
@@ -17,7 +17,7 @@ module.exports = function(grunt) {
       },
       my_target: {
         files: {
-          '../dist/reptileforms.min.js': ['source.js']
+          'dist/reptileforms.min.js': ['source.js']
         }
       }
     },
@@ -28,15 +28,15 @@ module.exports = function(grunt) {
           style: 'compressed'
         },
         files: {
-          'styles/reptileforms.min.css': 'styles/source.scss'
+          'src/styles/reptileforms.min.css': 'src/styles/source.scss'
         }
       }
     },
 
     autoprefixer: {
       single_file: {
-        src: 'styles/reptileforms.min.css',
-        dest: '../dist/reptileforms.min.css'
+        src: 'src/styles/reptileforms.min.css',
+        dest: 'dist/reptileforms.min.css'
       }
     },
 
