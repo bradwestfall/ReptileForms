@@ -58,7 +58,7 @@ The resulting DOM in is as follows:
 > Notice that the `title` attribute was used to create our visual Title and was removed form the `<input>` field. Then we made a field container: `<div class="field first-name required text">` with convenient classname hooks. Also note how we left HTML untouched if it's not an input field (such as the button)
 
 ## Basic Fields
-Use `<input>`, `<select>`, or `<textarea>` tags with standard attribtues such as `name` (required), `type`, `reqired`, `maxlength`, etc...
+Use `<input>`, `<select>`, or `<textarea>` tags with standard attribtues such as `name` (which we require), `type`, `reqired`, `maxlength`, etc...
 
 ## Field Attributes
 Besides using standard attributes which will work as expected, use these attributes for additional ReptileForms functionality:
