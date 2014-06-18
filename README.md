@@ -9,15 +9,17 @@ $ bower install ReptileForms --save
 ```
 
 ## Features
-- AJAX Post submissions by default
+- Use standard `<form>` and `<input>` tags with standard attributes
+ - ReptileForms will make adjustments with it's settings to turn your forms into ReptileForms
+- AJAX submissions by default
  - Easy callbacks to override
 - Built-in validation
- - Easily add custom regular expressions
+ - Use built in regular expressions or provide your own
 - OOCSS Approach
- - Structure Styles Supplied
-- Just use common `<input>` fields as usual
-- Easily build custom fields with custom validation
- - Custom fields can include "composite fields"
+ - Structure Styles provided separatly from design styles allowing you to create your own design more easily.
+ - Stock Design Styles coming soon
+- Custom Fields and/or Custom Validation on a per-field basis
+ - Custom fields can include "composite fields" - see below in Custom Fields
 
 ## Basic Usage
 ###JS
