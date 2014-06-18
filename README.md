@@ -23,6 +23,7 @@ $ bower install ReptileForms --save
 
 ## Basic Usage
 ###JS
+Call `ReptileForms()` and pass in a selector reference to your form. Also pass in callbacks to customize how your forms will work
 ```js
 var form = new ReptileForm('.reptile-form', {
 	validationError: function(err) {
@@ -34,6 +35,7 @@ var form = new ReptileForm('.reptile-form', {
 });
 ```
 ###Initial HTML
+Write some initial HTML. Notice that we're using a standard `input` field with standard attributes
 ```html
 <form class="reptile-form" action="/process" method="POST">
 	<input type="text" name="first-name" title="First Name" required maxlength="20">
@@ -41,6 +43,7 @@ var form = new ReptileForm('.reptile-form', {
 </form>
 ```
 ###Resulting DOM
+The resulting DOM in is as follows:
 ```html
 <form class="reptile-form" action="/process" method="POST">
 	<div class="field first-name required text">
@@ -52,6 +55,8 @@ var form = new ReptileForm('.reptile-form', {
 	<button>Submit</button>
 </form>
 ```
+> Notice that the `title` attribute was used to create our visual Title and was removed form the `<input>` field. Also notice the convenience CSS hooks for our field container: `<div class="field first-name required text">`
+
 ## Basic Fields
 Use `<input>`, `<select>`, or `<textarea>` tags with standard attribtues such as `name` (required), `type`, `reqired`, `maxlength`, etc...
 
@@ -65,25 +70,23 @@ Besides using standard attributes which will work as expected, use these attribu
 ReptileForms was created with custom fields in mind.
 
 ###Initial HTML
-You can create custom fields by wraping the any HTML you need in a `<div class="field-input">` element.
+You can create custom fields by wraping the any HTML you need in a `<div class="field-input">` element. Since we're doing a custom element, we wont supply a `name` attribte, but rather a `data-name` attribute which is required. Also notice that we're providing a reference to some custom validation (`validateTerms` is a function name that we will register with ReptileForms)
 ```html
 <form class="reptile-form" action="/process" method="POST">
 	<div class="field-input" data-name="terms" data-custom-validation="validateTerms">
 		<span class="agree">Agree to terms</span>
 	</div>
-	<button>Submit</button>
 </form>
 ```
 ###Resulting DOM
 ReptileForms will will build the `<div class="field">` wrapper (and this time without a `<div class="title">` because there was no title attribute supplied. Also notice that we've provided a reference to some custom validation:
 ```html
 <form class="reptile-form" action="/process" method="POST">
-	<div class="field first-name required text">
-		<div class="field-input" data-name="terms" data-custom-validation="validateTerms">
+	<div class="field terms">
+		<div class="field-input">
 			<span class="agree">Agree to terms</span>
 		</div>
 	</div>
-	<button>Submit</button>
 </form>
 ```
 ###Register Custom Validation
