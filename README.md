@@ -65,7 +65,7 @@ Besides using standard attributes which will work as expected, use these attribu
 ReptileForms was created with custom fields in mind.
 
 ###Initial HTML
-You can create custom fields by wraping the any HTML you need in a class="field-input" element.
+You can create custom fields by wraping the any HTML you need in a `<div class="field-input">` element.
 ```html
 <form class="reptile-form" action="/process" method="POST">
 	<div class="field-input" data-name="terms" data-custom-validation="validateTerms">
