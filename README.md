@@ -54,9 +54,34 @@ var form = new ReptileForm('.reptile-form', {
 ```
 ## Basic Fields
 Use `<input>`, `<select>`, or `<textarea>` tags with standard attribtues such as `name` (required), `type`, `reqired`, `maxlength`, etc...
-Also use these attributes for additional ReptileForms functionality:
-- `title` Will be used as a visual title and also for error messages
-- `data-exp-name` The name of the regular expression to use in validation
 
+## Field Attributes
+Besides using standard attributes which will work as expected, use these attributes for additional ReptileForms functionality:
+- `title` Will be used as a visual title and also for error message titles
+- `data-exp-name` The name of the regular expression to use in validation
+- `data-custom-validation` The name of a function to be used for this field's validation. This serves as a replacement to ReptileForms' default validation
 ## Custom Fields
-Documentation coming soon
+
+
+###Initial HTML
+You can create custom fields by wraping the any HTML you need in a class="field-input" element.
+```html
+<form class="reptile-form" action="/process" method="POST">
+	<div class="field-input" data-name="terms" data-custom-validation="validateTerms">
+		<span class="agree">Agree to terms</span>
+	</div>
+	<button>Submit</button>
+</form>
+```
+###Resulting DOM
+ReptileForms will will build the `<div class="field">` wrapper (and this time without a `<div class="title">` because there was no title attribute supplied. Also notice that we've provided a reference to some custom validation
+```html
+<form class="reptile-form" action="/process" method="POST">
+	<div class="field first-name required text">
+		<div class="field-input" data-name="terms" data-custom-validation="validateTerms">
+			<span class="agree">Agree to terms</span>
+		</div>
+	</div>
+	<button>Submit</button>
+</form>
+```
