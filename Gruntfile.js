@@ -17,7 +17,7 @@ module.exports = function(grunt) {
       },
       my_target: {
         files: {
-          'dist/reptileforms.min.js': ['source.js']
+          'dist/reptileforms.min.js': ['src/source.js']
         }
       }
     },
@@ -46,8 +46,8 @@ module.exports = function(grunt) {
         tasks: ['sass', 'autoprefixer']
       },
       scripts: {
-        files: '*.js',
-        tasks: ['uglify', 'copy']
+        files: 'src/source.js',
+        tasks: ['copy', 'uglify']
       }
     }
 
