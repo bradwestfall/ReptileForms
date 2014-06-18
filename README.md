@@ -55,7 +55,7 @@ The resulting DOM in is as follows:
 	<button>Submit</button>
 </form>
 ```
-> Notice that the `title` attribute was used to create our visual Title and was removed form the `<input>` field. Also notice the convenience CSS hooks for our field container: `<div class="field first-name required text">`
+> Notice that the `title` attribute was used to create our visual Title and was removed form the `<input>` field. Then we made a field container: `<div class="field first-name required text">` with convenient classname hooks. Also note how we left HTML untouched if it's not an input field (such as the button)
 
 ## Basic Fields
 Use `<input>`, `<select>`, or `<textarea>` tags with standard attribtues such as `name` (required), `type`, `reqired`, `maxlength`, etc...
