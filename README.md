@@ -60,8 +60,9 @@ Besides using standard attributes which will work as expected, use these attribu
 - `title` Will be used as a visual title and also for error message titles
 - `data-exp-name` The name of the regular expression to use in validation
 - `data-custom-validation` The name of a function to be used for this field's validation. This serves as a replacement to ReptileForms' default validation
-## Custom Fields
 
+## Custom Fields
+ReptileForms was created with custom fields in mind.
 
 ###Initial HTML
 You can create custom fields by wraping the any HTML you need in a class="field-input" element.
@@ -74,7 +75,7 @@ You can create custom fields by wraping the any HTML you need in a class="field-
 </form>
 ```
 ###Resulting DOM
-ReptileForms will will build the `<div class="field">` wrapper (and this time without a `<div class="title">` because there was no title attribute supplied. Also notice that we've provided a reference to some custom validation
+ReptileForms will will build the `<div class="field">` wrapper (and this time without a `<div class="title">` because there was no title attribute supplied. Also notice that we've provided a reference to some custom validation:
 ```html
 <form class="reptile-form" action="/process" method="POST">
 	<div class="field first-name required text">
@@ -84,4 +85,13 @@ ReptileForms will will build the `<div class="field">` wrapper (and this time wi
 	</div>
 	<button>Submit</button>
 </form>
+```
+###Register Custom Validation
+```js
+var form = new ReptileForm(/* Start Reptile Forms */);
+
+// Register Custom Error Handling
+form.validateTerms = function(formField) {
+	// Where formField is a jQuery object referencing the <div class="field"> that is being validated
+}
 ```
