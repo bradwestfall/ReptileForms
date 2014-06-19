@@ -70,7 +70,7 @@ Besides using standard attributes which will work as expected, use these attribu
 ReptileForms was created with custom fields in mind.
 
 ###Initial HTML
-You can create custom fields by wraping your field in a `<div class="field-input">` element. Since we're doing a custom element, we wont supply a `name` attribte, but rather a `data-name` attribute which is required. Also notice that we're providing a reference to some custom validation (`validateTerms` is a function name that we will register with ReptileForms)
+You can create custom fields by wraping your field in a `<div class="field-input">` element. Every field in ReptileForms must have a name (to be submitted over HTTP) but since div tags don't technically support the `name` attribute, we will use `data-name` instead. Also notice that we're providing a reference to custom validation for this field. `validateTerms` is a function name that we will register with ReptileForms (See JS below).
 ```html
 <form class="reptile-form" action="/process" method="POST">
 	<div class="field-input" data-name="terms" data-custom-validation="validateTerms">
