@@ -16,8 +16,9 @@ $ bower install ReptileForms --save
 - Built-in validation
  - Use built in regular expressions or provide your own
 - OOCSS Approach
- - Structure Styles provided separatly from design styles allowing you to create your own design more easily.
- - Stock Design Styles coming soon
+ - Structure Styles provided separatly from Design Styles
+  - Easily create your own design styles
+  - Stock Design Styles coming soon
 - Custom Fields and/or Custom Validation on a per-field basis
  - Custom fields can include "composite fields" - see below in Custom Fields
 
