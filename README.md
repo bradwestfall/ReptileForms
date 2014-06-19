@@ -17,14 +17,13 @@ $ bower install ReptileForms --save
  - Use built in regular expressions or provide your own
 - OOCSS Approach
  - Structure Styles provided separatly from Design Styles
-  - Easily create your own design styles
-  - Stock Design Styles coming soon
+ - Optional Design themes coming soon
 - Custom Fields and/or Custom Validation on a per-field basis
  - Custom fields can include "composite fields" - see below in Custom Fields
 
 ## Basic Usage
 ###JS
-Call `ReptileForms()` and pass in a selector reference to your form. Also pass in callbacks to customize how your forms will work
+Call `ReptileForm()` and pass in a selector reference to your form. Also pass in callbacks to customize how your forms will work
 ```js
 var form = new ReptileForm('.reptile-form', {
 	validationError: function(err) {
