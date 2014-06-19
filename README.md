@@ -90,11 +90,12 @@ ReptileForms will build the `<div class="field">` wrapper (and this time without
 </form>
 ```
 ###Register Custom Validation
+After you've called `ReptileForm()`, you can use the object your given to prototype new (or replacement) functions as follows.
 ```js
 var form = new ReptileForm(/* Start Reptile Forms */);
 
 // Register Custom Error Handling
 form.validateTerms = function(formField) {
-	// Where formField is a jQuery object referencing the <div class="field"> that is being validated
 }
 ```
+> Note that formField is a jQuery object referencing the `<div class="field">` that is being validated
