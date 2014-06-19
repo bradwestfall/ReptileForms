@@ -294,23 +294,23 @@
 	  CUSTOM FIELD VALIDATION
 	************************************/
 
-	ReptileForm.prototype.checkboxGroupValidate = function(formField) {
+	ReptileForm.prototype.validateCheckboxGroup = function(formField) {
 		
 		// Collect Values
 		var value = [];
 		formField.find('input[type="checkbox"]').each(function() {
 			if ($(this).is(':checked') && $(this).val()) {value.push($(this).val());}
 		});
-		
+		console.log(value);
 		// Store Values
-		self.storeValue(formField.data('name'), value);
+		this.storeValue(formField.data('name'), value);
 
-		//
-		var isRequired = formField.hasClass('required');
-		if (isRequired && !value.length) {
-			self.addError(formField.data('title'), 'Value Is Required');
-			return;
+		if (formField.data('required') && !value.length) {
+			this.addError(formField.data('title'), 'Value Is Required');
+			return false;
 		}
+		
+		return value;
 	}
 
 	/***********************************
