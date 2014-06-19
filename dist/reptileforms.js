@@ -51,9 +51,9 @@
 		// Submit Form
 		self.el.on('submit', function() {
 
-			// Before Submit
-			if ($.isFunction(self.settings.beforeSubmit)) {
-				if (false === self.settings.beforeSubmit.call(self)) return false;
+			// Before Validation
+			if ($.isFunction(self.settings.beforeValidation)) {
+				if (false === self.settings.beforeValidation.call(self)) return false;
 			}
 
 			// Validate
@@ -61,7 +61,12 @@
 
 				// Use browser's default submit
 				if (!self.settings.useAjax) return true;
-				
+
+				// Before Submit
+				if ($.isFunction(self.settings.beforeSubmit)) {
+					if (false === self.settings.beforeSubmit.call(self)) return false;
+				}
+
 				// Submit Form
 				self.submitForm.call(self, self.el.attr('action'), self.getValues());
 				return false;
@@ -122,6 +127,7 @@
 			.data('title', title ? title : name)
 			.data('exp-name', expressionName)
 			.data('custom-validation', customValidation)
+			.data('required', required)
 			.addClass('field')
 			.addClass(name)
 			.addClass(required ? 'required' : null)
@@ -140,7 +146,7 @@
 		// Setup
 		var self = this;
 		var name = originalField.data('name');
-		var title = originalField.data('title') || null;
+		var title = originalField.attr('title') || name;
 		var required = Boolean(originalField.data('required'));
 		var expressionName = originalField.data('exp-name') || null;
 		var customValidation = originalField.data('custom-validation') || null;
@@ -158,9 +164,10 @@
 		// Make field container
 		return $(document.createElement('div'))
 			.data('name', name)
-			.data('title', title ? title : name)
+			.data('title', title)
 			.data('exp-name', expressionName)
 			.data('custom-validation', customValidation)
+			.data('required', required)
 			.addClass('field')
 			.addClass(name)
 			.addClass(required ? 'required' : null)
@@ -186,12 +193,13 @@
 			return null;
 		}
 
-		// Make form-field container
-		field.data('name', field.attr('name'))
-			.data('title', title)
-			.addClass('field')
+		// Modify Field to be similar to a field container
+		field.addClass('field')
 			.addClass(name)
-
+			.data('name', field.attr('name'))
+			.data('title', title)
+			.data('required', required);
+			
 		return field.prop('outerHTML');
 
 	}
@@ -213,6 +221,7 @@
 
 		// Start New Form Validation
 		self.el.find('.field').each(function() {
+			var value = '';
 			var formField = $(this);
 			var title = formField.data('title');
 			var name = formField.data('name');
@@ -220,19 +229,18 @@
 			// Custom Validation
 			var customValidation = formField.data('custom-validation');
 			if (customValidation && $.isFunction(self[customValidation])) {
-				var value = self[customValidation](formField);
+				value = self[customValidation](formField);
 				self.storeValue(name, value);
 				return;
 			}
 
-			// Common Validation
-			var value = self.getFieldValue(formField);
-			var isRequired = Boolean(formField.hasClass('required')) || Boolean(formField.attr('required'));
+			// Get / Store
+			value = self.getFieldValue(formField);
 			self.storeValue(name, value);
 
 			// Validate Requiredness
-			if (isRequired && !value) {
-				self.addError(title, 'Value is required');
+			if (formField.data('required') && !value) {
+				self.addError(name, title, 'Value is required');
 				return;
 			}
 
@@ -241,13 +249,13 @@
 			if (expName && self.settings.expressions) { 
 				var expression = self.settings.expressions[expName];
 				if (expression && expression.rule && !eval(expression.rule).test(value)) {
-					self.addError(title, expression.msg);
+					self.addError(name, title, expression.msg);
 				}
 			}
 			
 		});
 
-		// If there were errors, show them now
+		// If there were errors, call validationError
 		if (!$.isEmptyObject(self.getErrors())) {
 			if ($.isFunction(self.settings.validationError)) { self.settings.validationError.call(self, self.getErrors()) };
 			return false;
@@ -310,8 +318,8 @@
 	  FORM VALUES AND ERRORS
 	************************************/
 
-	ReptileForm.prototype.addError = function(title, msg) {
-		this.formErrors.push({'title': title, 'msg': msg});
+	ReptileForm.prototype.addError = function(name, title, msg) {
+		this.formErrors.push({'name': name, 'title': title, 'msg': msg});
 	}
 
 	ReptileForm.prototype.clearErrors = function() {
@@ -333,30 +341,5 @@
 	ReptileForm.prototype.getValues = function() {
 		return this.formValues;
 	}
-
-
-	/***********************************
-	  CUSTOM FIELD METHODS
-	************************************/
-
-	// ReptileForm.prototype.checkboxGroupValidate = function(formField) {
-	// 	var self = this;
-	// 	var title = formField.data('title');
-	// 	var value = self.checkboxGroupGetValue(formField);
-	// 	self.storeValue(title, value);
-	// 	var isRequired = formField.hasClass('required');
-	// 	if (isRequired && !value.length) {
-	// 		self.addError(title, 'Value Is Required');
-	// 		return;
-	// 	}
-	// }
-
-	// ReptileForm.prototype.checkboxGroupGetValue = function(formField) {
-	// 	var value = [];
-	// 	formField.find('input[type="checkbox"]').each(function() {
-	// 		if ($(this).is(':checked') && $(this).val()) {value.push($(this).val());}
-	// 	});
-	// 	return value;
-	// }
 	
 })(jQuery, window, document);

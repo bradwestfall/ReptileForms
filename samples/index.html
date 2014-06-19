@@ -34,12 +34,16 @@
 
 			// Handle errors your way
 			validationError: function(err) {
-				alert(JSON.stringify(err));
+				alert('Error: ' + JSON.stringify(err));
 			},
 
 			// Remove our silent CAPTCHA, see belore for more details
-			beforeSubmit: function() {
+			beforeValidation: function() {
 				this.el.find('input[name="process_form"]').remove();
+			},
+
+			beforeSubmit: function() {
+				alert('Sending Values: ' + JSON.stringify(this.getValues()));
 				this.el.addClass('submitting');
 			},
 
@@ -54,7 +58,9 @@
 		form.validateTerms = function(formField) {
 			if (!formField.find('.selected').length) {
 				this.addError('Terms', 'You must agree to terms');
+				return true;
 			}
+			return false;
 		}
 
 		// Custom Field: This has nothing to do with ReptileForms, but just
