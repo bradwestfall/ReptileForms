@@ -79,7 +79,7 @@ You can create custom fields by wraping your field in a `<div class="field-input
 </form>
 ```
 ###Resulting DOM
-ReptileForms will will build the `<div class="field">` wrapper (and this time without a `<div class="title">` because there was no title attribute supplied. Also notice that we've provided a reference to some custom validation:
+ReptileForms will build the `<div class="field">` wrapper (and this time without a `<div class="title">` because there was no title attribute supplied.
 ```html
 <form class="reptile-form" action="/process" method="POST">
 	<div class="field terms">
