@@ -17,6 +17,7 @@
 				"password": {"rule":"\/^[\\040-\\176]{6,30}$\/","msg":"Invalid Password, Must be between 6 and 30 characters."}
 			},
 			ready: function() {},
+			beforeValidation: function() {},
 			validationError: function() {},
 			beforeSubmit: function() {},
 			submitSuccess: function() {},
