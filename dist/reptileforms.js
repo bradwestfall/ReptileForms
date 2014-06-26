@@ -148,7 +148,7 @@
 		var self = this;
 		var fieldType = originalField.data('type');
 		
-		switch(fieldType.toLowerCase()) {
+		switch(fieldType !== undefined && fieldType.toLowerCase()) {
 			case 'radio-group':
 				var firstField = originalField.find('input[type="radio"]').first();
 				var name = firstField.attr('name');
