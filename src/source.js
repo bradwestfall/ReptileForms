@@ -314,7 +314,8 @@
 			return false;
 		}
 		
-		return value;
+		return values;
+		
 	}
 
 	/***********************************
