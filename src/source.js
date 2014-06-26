@@ -298,16 +298,17 @@
 	ReptileForm.prototype.validateCheckboxGroup = function(formField) {
 		
 		// Collect Values
-		var value = [];
+		var values = [];
 		formField.find('input[type="checkbox"]').each(function() {
-			if ($(this).is(':checked') && $(this).val()) {value.push($(this).val());}
+			if ($(this).is(':checked') && $(this).val()) values.push($(this).val());
 		});
-		console.log(value);
+		
 		// Store Values
-		this.storeValue(formField.data('name'), value);
+		var name = formField.data('name');
+		this.storeValue(name, values);
 
-		if (formField.data('required') && !value.length) {
-			this.addError(formField.data('title'), 'Value Is Required');
+		if (formField.data('required') && !values.length) {
+			this.addError(name, formField.data('title'), 'Value Is Required');
 			return false;
 		}
 		
