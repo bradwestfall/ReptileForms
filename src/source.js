@@ -146,12 +146,33 @@
 		
 		// Setup
 		var self = this;
-		var name = originalField.data('name');
+		var fieldType = originalField.data('type');
+		
+		switch(fieldType.toLowerCase()) {
+			case 'radio-group':
+				var firstField = originalField.find('input[type="radio"]').first();
+				var name = firstField.attr('name');
+				var required = Boolean(firstField.attr('required'));
+				var customValidation = 'validateRadioGroup';
+				break;
+
+			case 'checkbox-group':
+				var firstField = originalField.find('input[type="checkbox"]').first();
+				var name = firstField.attr('name');
+				var required = Boolean(firstField.attr('required'));
+				var customValidation = 'validateCheckboxGroup';
+				break;
+
+			default:
+				var name = originalField.data('name') || null;
+				var required = Boolean(originalField.data('required'));
+				var customValidation = originalField.data('custom-validation') || null;
+
+		}
+
+
 		var title = originalField.attr('title') || name;
-		var required = Boolean(originalField.data('required'));
-		var fieldType = originalField.data('type') || null;
-		var expressionName = originalField.data('exp-name') || null;
-		var customValidation = originalField.data('custom-validation') || null;
+		//var expressionName = originalField.data('exp-name') || null;
 
 		// Require Name
 		if (!name) {
@@ -167,7 +188,7 @@
 		return $(document.createElement('div'))
 			.data('name', name)
 			.data('title', title)
-			.data('exp-name', expressionName)
+			//.data('exp-name', expressionName)
 			.data('custom-validation', customValidation)
 			.data('required', required)
 			.addClass('field')
@@ -297,14 +318,37 @@
 	  CUSTOM FIELD VALIDATION
 	************************************/
 
+	/**
+	 * Radio Group
+	 */
+	ReptileForm.prototype.validateRadioGroup = function(formField) {
+
+		// Get Value
+		var value = formField.find('input:checked').val();
+
+		// Store Values
+		var name = formField.data('name');
+		this.storeValue(name, value);
+
+		if (formField.data('required') && !value) {
+			this.addError(name, formField.data('title'), 'Value Is Required');
+			return false;
+		}
+		
+		return value;
+
+	}
+	
+	/**
+	 * Checkbox Group
+	 */
 	ReptileForm.prototype.validateCheckboxGroup = function(formField) {
 		
 		// Collect Values
-		var values = [];
-		formField.find('input[type="checkbox"]').each(function() {
-			if ($(this).is(':checked') && $(this).val()) values.push($(this).val());
-		});
-		
+		var values = $('input[type="checkbox"]:checked').map(function(){
+			return $(this).val();
+		}).get();
+
 		// Store Values
 		var name = formField.data('name');
 		this.storeValue(name, values);
@@ -315,7 +359,7 @@
 		}
 		
 		return values;
-		
+
 	}
 
 	/***********************************

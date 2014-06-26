@@ -14,9 +14,11 @@
 			margin-left: 180px;
 		}
 
-		&.checkbox-group label {
-			margin-left: 5px;
-			margin-right: 5px;
+		&.checkbox-group, &.radio-group {
+			& label {
+				margin-left: 5px;
+				margin-right: 5px;
+			}
 		}
 
 	}
