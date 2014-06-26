@@ -108,7 +108,7 @@
 		
 		// Make new Field Input
 		var fieldInput = $(originalField[0].outerHTML);
-		fieldInput.removeAttr('title required data-exp-name');
+		fieldInput.removeAttr('title data-exp-name');
 		var fieldInput = $(document.createElement('div'))
 			.addClass('field-input')
 			.html(fieldInput);
@@ -149,6 +149,7 @@
 		var name = originalField.data('name');
 		var title = originalField.attr('title') || name;
 		var required = Boolean(originalField.data('required'));
+		var fieldType = originalField.data('type') || null;
 		var expressionName = originalField.data('exp-name') || null;
 		var customValidation = originalField.data('custom-validation') || null;
 
@@ -160,7 +161,7 @@
 
 		// Make new Field Input
 		var fieldInput = $(originalField[0].outerHTML);
-		fieldInput.removeAttr('data-title data-name data-required data-exp-name data-custom-validation');
+		fieldInput.removeAttr('data-title data-name data-required data-exp-name data-type data-custom-validation');
 
 		// Make field container
 		return $(document.createElement('div'))
@@ -172,6 +173,7 @@
 			.addClass('field')
 			.addClass(name)
 			.addClass(required ? 'required' : null)
+			.addClass(fieldType)
 			.append(title ? '<div class="title">' + title + '</div>' : null)
 			.append(fieldInput);
 
