@@ -1,9 +1,21 @@
 !(function($, window, document, undefined) {
-	ReptileForm = function(el, settings) {
+	ReptileForm = function(forms, settings) {
+		this.forms = forms;
+		$(forms).each(function() {
+			$(this).data('reptile-form', new rf($(this), settings));
+		});
+	}
+	ReptileForm.prototype.customValidation = function(f, cb) {
+		$(this.forms).each(function() {
+			$(this).data('reptile-form')[f] = cb;
+		});
+	}
+	
+	rf = function(el, settings) {
 
 		// Setup
 		var self = this;
-		self.el = $(el);
+		self.el = el; //$(el);
 		if (!self.el.length) { return false; }
 	
 		// Settings
@@ -90,7 +102,7 @@
 	/**
 	 * Render Field
 	 */
-	ReptileForm.prototype.renderField = function(originalField) {
+	rf.prototype.renderField = function(originalField) {
 		
 		// Setup
 		var self = this;
@@ -142,7 +154,7 @@
 	/**
 	 * Render Custom Field
 	 */
-	ReptileForm.prototype.renderCustomField = function(originalField) {
+	rf.prototype.renderCustomField = function(originalField) {
 		
 		// Setup
 		var self = this;
@@ -203,7 +215,7 @@
 	/**
 	 * Render Field Hidden
 	 */
-	ReptileForm.prototype.renderFieldHidden = function(field) {
+	rf.prototype.renderFieldHidden = function(field) {
 		
 		// Setup
 		var self = this;
@@ -236,7 +248,7 @@
 	/**
 	 * Validate
 	 */
-	ReptileForm.prototype.validate = function() {
+	rf.prototype.validate = function() {
 		
 		// Setup
 		var self = this;
@@ -292,7 +304,7 @@
 	/**
 	 * Get Field Value
 	 */
-	ReptileForm.prototype.getFieldValue = function(formField) {
+	rf.prototype.getFieldValue = function(formField) {
 
 		// Require Name
 		var name = formField.data('name');
@@ -321,7 +333,7 @@
 	/**
 	 * Radio Group
 	 */
-	ReptileForm.prototype.validateRadioGroup = function(formField) {
+	rf.prototype.validateRadioGroup = function(formField) {
 
 		// Get Value
 		var value = formField.find('input:checked').val();
@@ -342,7 +354,7 @@
 	/**
 	 * Checkbox Group
 	 */
-	ReptileForm.prototype.validateCheckboxGroup = function(formField) {
+	rf.prototype.validateCheckboxGroup = function(formField) {
 		
 		// Collect Values
 		var values = $('input[type="checkbox"]:checked').map(function(){
@@ -369,7 +381,7 @@
 	/**
 	 * Submit via Ajax
 	 */
-	ReptileForm.prototype.submitForm = function(url, formValues) {
+	rf.prototype.submitForm = function(url, formValues) {
 		var self = this;
 		$.ajax({
 			cache: false,
@@ -390,27 +402,27 @@
 	  FORM VALUES AND ERRORS
 	************************************/
 
-	ReptileForm.prototype.addError = function(name, title, msg) {
+	rf.prototype.addError = function(name, title, msg) {
 		this.formErrors.push({'name': name, 'title': title, 'msg': msg});
 	}
 
-	ReptileForm.prototype.clearErrors = function() {
+	rf.prototype.clearErrors = function() {
 		this.formErrors = [];
 	}
 
-	ReptileForm.prototype.getErrors = function() {
+	rf.prototype.getErrors = function() {
 		return this.formErrors;
 	}
 
-	ReptileForm.prototype.storeValue = function(name, value) {
+	rf.prototype.storeValue = function(name, value) {
 		this.formValues[name] = value;
 	}
 
-	ReptileForm.prototype.clearValues = function() {
+	rf.prototype.clearValues = function() {
 		this.formValues = {};
 	}
 
-	ReptileForm.prototype.getValues = function() {
+	rf.prototype.getValues = function() {
 		return this.formValues;
 	}
 	
