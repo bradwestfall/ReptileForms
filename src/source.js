@@ -1,21 +1,26 @@
 !(function($, window, document, undefined) {
+	
+	// Assign Reptile Forms to multiple forms that match selector
 	ReptileForm = function(forms, settings) {
-		this.forms = forms;
+		//this.forms = forms;
 		$(forms).each(function() {
 			$(this).data('reptile-form', new rf($(this), settings));
 		});
 	}
+
+	// Add Custom Validation to each form
 	ReptileForm.prototype.customValidation = function(f, cb) {
 		$(this.forms).each(function() {
 			$(this).data('reptile-form')[f] = cb;
 		});
 	}
-	
-	rf = function(el, settings) {
+
+	// Reptile Form
+	var rf = function(el, settings) {
 
 		// Setup
 		var self = this;
-		self.el = el; //$(el);
+		self.el = el;
 		if (!self.el.length) { return false; }
 	
 		// Settings

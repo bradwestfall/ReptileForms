@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>ReptileForms Sample Code</title>
+
+	<!-- Required JavaScript -->
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="../dist/reptileforms.js"></script>
+
+	<script>
+	$(function() {
+
+		// This is the most basic usage of ReptileForms. Create an instance
+		// of the ReptileForms object by passing in a DOM selector to reference
+		// the forms you want to target
+		var form = new ReptileForm('.reptile-form');
+
+	});
+	</script>
+
+</head>
+<body>
+
+	<!--
+	Note that the default method for ReptileForms is POST if omited. ReptileForms
+	will also use an AJAX submission by default and will use the form's action
+	attribute as it's POST target. Input fields should be written without any 
+	extra HTML around them unless you're intending to make custom fields (which
+	are documented in a different sample page). Name attributes are required
+	for all fields and title attributes are optional. If title attributes are
+	supplied, they will be used to create visible labels
+	-->
+	<form class="reptile-form" action="response.json">
+		<input type="text" name="first_name" title="First Name">
+		<input type="text" name="last_name" title="Last Name">
+		<button>Submit</button>
+	</form>
+	
+</body>
+</html>
