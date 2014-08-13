@@ -1,13 +1,21 @@
 !(function($, window, document, undefined) {
+	
 	ReptileForm = function(forms, settings) {
 		this.forms = forms;
 		$(forms).each(function() {
 			$(this).data('reptile-form', new rf($(this), settings));
 		});
 	}
+	
 	ReptileForm.prototype.customValidation = function(f, cb) {
 		$(this.forms).each(function() {
 			$(this).data('reptile-form')[f] = cb;
+		});
+	}
+
+	ReptileForm.prototype.on = function(e, cb) {
+		$(this.forms).each(function() {
+			$(this).data('reptile-form').el.on(e, cb);
 		});
 	}
 	
@@ -15,7 +23,7 @@
 
 		// Setup
 		var self = this;
-		self.el = el; //$(el);
+		self.el = el;
 		if (!self.el.length) { return false; }
 	
 		// Settings
@@ -27,13 +35,14 @@
 			expressions: {
 				"email": {"rule":"\/^[a-zA-Z0-9._-]+@[\\.a-zA-Z0-9-]+\\.[a-zA-Z.]{2,5}$\/","msg":"Invalid Email."},
 				"password": {"rule":"\/^[\\040-\\176]{6,30}$\/","msg":"Invalid Password, Must be between 6 and 30 characters."}
-			},
-			ready: function() {},
-			beforeValidation: function() {},
-			validationError: function() {},
-			beforeSubmit: function() {},
-			submitSuccess: function() {},
-			submitError: function() {}
+			}
+			//,
+			// ready: function() {},
+			// beforeValidation: function() {},
+			// validationError: function() {},
+			// beforeSubmit: function() {},
+			// submitSuccess: function() {},
+			// submitError: function() {}
 		}, settings);
 
 		// Use Reptile Validation
@@ -43,9 +52,9 @@
 		self.clearErrors();
 		self.clearValues();
 
-		// Setup Method and Action
-		if (!self.el.attr('method')) { self.el.attr('method', self.settings.method); }
-		if (!self.el.attr('action')) { self.el.attr('action', self.settings.action); }
+		// Give the form a method and action if it doesn't have one
+		if (!self.el.attr('method')) self.el.attr('method', self.settings.method);
+		if (!self.el.attr('action')) self.el.attr('action', self.settings.action);
 
 		// Render Fields
 		self.el.children('input, select, textarea, .field-input').each(function() {
@@ -53,7 +62,7 @@
 			var field = $(this);
 			switch(true) {
 				case field.attr('type') == 'hidden':
-					self.renderFieldHidden(field); break;
+					self.renderHiddenField(field); break;
 				case field.hasClass('field-input'):
 					field.replaceWith(self.renderCustomField(field)); break;
 				default:
@@ -65,9 +74,14 @@
 		self.el.on('submit', function() {
 
 			// Before Validation
-			if ($.isFunction(self.settings.beforeValidation)) {
-				if (false === self.settings.beforeValidation.call(self)) return false;
-			}
+			//if ($.isFunction(self.settings.beforeValidation)) {
+			//	if (false === self.settings.beforeValidation.call(self)) return false;
+			//}
+
+			self.el.trigger('beforeValidation');
+
+			console.log('here');
+			return false
 
 			// Validate
 			if (self.validate()) {
@@ -215,7 +229,7 @@
 	/**
 	 * Render Field Hidden
 	 */
-	rf.prototype.renderFieldHidden = function(field) {
+	rf.prototype.renderHiddenField = function(field) {
 		
 		// Setup
 		var self = this;
