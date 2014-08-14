@@ -1,29 +1,43 @@
 !(function($, window, document, undefined) {
 	
+	/**
+	 * Start Reptile Form Objects
+	 */
 	ReptileForm = function(forms, settings) {
 		this.forms = forms;
 		$(forms).each(function() {
-			$(this).data('reptile-form', new rf($(this), settings));
+			$(this).data('rf', new rf(this, settings));
 		});
 	}
 	
+	/**
+	 * Register Custom Validation
+	 */
 	ReptileForm.prototype.customValidation = function(f, cb) {
 		$(this.forms).each(function() {
-			$(this).data('reptile-form')[f] = cb;
+			$(this).data('rf').customValidation[f] = cb;
 		});
 	}
 
+	/**
+	 * Register Event Emitter
+	 */
 	ReptileForm.prototype.on = function(e, cb) {
 		$(this.forms).each(function() {
-			$(this).data('reptile-form').el.on(e, cb);
+			var rf = $(this).data('rf');
+			$(rf).on(e, cb);
 		});
 	}
-	
+
+	/**
+	 * Reptile Form
+	 */
 	rf = function(el, settings) {
 
 		// Setup
 		var self = this;
-		self.el = el;
+		self.customValidation = [];
+		self.el = $(el);
 		if (!self.el.length) { return false; }
 	
 		// Settings
@@ -35,14 +49,23 @@
 			expressions: {
 				"email": {"rule":"\/^[a-zA-Z0-9._-]+@[\\.a-zA-Z0-9-]+\\.[a-zA-Z.]{2,5}$\/","msg":"Invalid Email."},
 				"password": {"rule":"\/^[\\040-\\176]{6,30}$\/","msg":"Invalid Password, Must be between 6 and 30 characters."}
+			},
+			submitForm: function(url, formValues) {
+				var rf = this;
+				$.ajax({
+					cache: false,
+					type: 'POST',
+					dataType: 'JSON',
+					url: url,
+					data: formValues,
+					success: function(data) {
+						$(rf).trigger('submitSuccess', data);
+					},
+					error: function(xhr, settings, thrownError) {
+						$(rf).trigger('submitError', xhr, settings, thrownError);
+					}
+				});
 			}
-			//,
-			// ready: function() {},
-			// beforeValidation: function() {},
-			// validationError: function() {},
-			// beforeSubmit: function() {},
-			// submitSuccess: function() {},
-			// submitError: function() {}
 		}, settings);
 
 		// Use Reptile Validation
@@ -69,43 +92,33 @@
 					field.replaceWith(self.renderField(field));
 			}
 		});
-
-		// Submit Form
+		
+		// Handle Submit Form
 		self.el.on('submit', function() {
 
 			// Before Validation
-			//if ($.isFunction(self.settings.beforeValidation)) {
-			//	if (false === self.settings.beforeValidation.call(self)) return false;
-			//}
-
-			self.el.trigger('beforeValidation');
-
-			console.log('here');
-			return false
+			$(self).trigger('beforeValidation');
 
 			// Validate
-			if (self.validate()) {
+			if (self.validate(this)) {
 
 				// Use browser's default submit
 				if (!self.settings.useAjax) return true;
 
 				// Before Submit
-				if ($.isFunction(self.settings.beforeSubmit)) {
-					if (false === self.settings.beforeSubmit.call(self)) return false;
-				}
+				$(self).trigger('beforeSubmit');
 
 				// Submit Form
-				self.submitForm.call(self, self.el.attr('action'), self.getValues());
+				self.settings.submitForm.call(self, self.el.attr('action'), self.getValues());
 				return false;
 
 			// Validation Failed
 			} else {
+				$(self).trigger('validationError');
 				return false;
 			}
-		});
 
-		// Ready
-		if ($.isFunction(self.settings.ready)) { self.settings.ready.call(self); }
+		});
 
 	}
 
@@ -262,15 +275,17 @@
 	/**
 	 * Validate
 	 */
-	rf.prototype.validate = function() {
+	rf.prototype.validate = function(form) {
 		
 		// Setup
 		var self = this;
+		var form = $(form);
 		self.clearErrors();
 		self.clearValues();
 
 		// Start New Form Validation
-		self.el.find('.field').each(function() {
+		form.find('.field').each(function() {
+
 			var value = '';
 			var formField = $(this);
 			var title = formField.data('title');
@@ -278,8 +293,8 @@
 
 			// Custom Validation
 			var customValidation = formField.data('custom-validation');
-			if (customValidation && $.isFunction(self[customValidation])) {
-				value = self[customValidation](formField);
+			if (customValidation && $.isFunction(self.customValidation[customValidation])) {
+				value = self.customValidation[customValidation].call(self, formField);
 				self.storeValue(name, value);
 				return;
 			}
@@ -304,14 +319,8 @@
 			}
 			
 		});
-
-		// If there were errors, call validationError
-		if (!$.isEmptyObject(self.getErrors())) {
-			if ($.isFunction(self.settings.validationError)) { self.settings.validationError.call(self, self.getErrors()) };
-			return false;
-		} else {
-			return true;
-		}
+getErrors()
+		return validForm;
 
 	}
 
@@ -344,73 +353,51 @@
 	  CUSTOM FIELD VALIDATION
 	************************************/
 
-	/**
-	 * Radio Group
-	 */
-	rf.prototype.validateRadioGroup = function(formField) {
+	// /**
+	//  * Radio Group
+	//  */
+	// rf.prototype.validateRadioGroup = function(formField) {
 
-		// Get Value
-		var value = formField.find('input:checked').val();
+	// 	// Get Value
+	// 	var value = formField.find('input:checked').val();
 
-		// Store Values
-		var name = formField.data('name');
-		this.storeValue(name, value);
+	// 	// Store Values
+	// 	var name = formField.data('name');
+	// 	this.storeValue(name, value);
 
-		if (formField.data('required') && !value) {
-			this.addError(name, formField.data('title'), 'Value Is Required');
-			return false;
-		}
+	// 	if (formField.data('required') && !value) {
+	// 		this.addError(name, formField.data('title'), 'Value Is Required');
+	// 		return false;
+	// 	}
 		
-		return value;
+	// 	return value;
 
-	}
+	// }
 	
-	/**
-	 * Checkbox Group
-	 */
-	rf.prototype.validateCheckboxGroup = function(formField) {
+	// /**
+	//  * Checkbox Group
+	//  */
+	// rf.prototype.validateCheckboxGroup = function(formField) {
 		
-		// Collect Values
-		var values = $('input[type="checkbox"]:checked').map(function(){
-			return $(this).val();
-		}).get();
+	// 	// Collect Values
+	// 	var values = $('input[type="checkbox"]:checked').map(function(){
+	// 		return $(this).val();
+	// 	}).get();
 
-		// Store Values
-		var name = formField.data('name');
-		this.storeValue(name, values);
+	// 	// Store Values
+	// 	var name = formField.data('name');
+	// 	this.storeValue(name, values);
 
-		if (formField.data('required') && !values.length) {
-			this.addError(name, formField.data('title'), 'Value Is Required');
-			return false;
-		}
+	// 	if (formField.data('required') && !values.length) {
+	// 		this.addError(name, formField.data('title'), 'Value Is Required');
+	// 		return false;
+	// 	}
 		
-		return values;
+	// 	return values;
 
-	}
+	// }
 
-	/***********************************
-	  SUBMIT FORM
-	************************************/
 
-	/**
-	 * Submit via Ajax
-	 */
-	rf.prototype.submitForm = function(url, formValues) {
-		var self = this;
-		$.ajax({
-			cache: false,
-			type: 'POST',
-			dataType: 'JSON',
-			url: url,
-			data: formValues,
-			success: function(data) {
-				if ($.isFunction(self.settings.submitSuccess)) { self.settings.submitSuccess.call(self, data); }
-			},
-			error: function(xhr, settings, thrownError) {
-				if ($.isFunction(self.settings.submitError)) { self.settings.submitError.call(self, xhr, settings, thrownError); }
-			}
-		});
-	}
 
 	/***********************************
 	  FORM VALUES AND ERRORS

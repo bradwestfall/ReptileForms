@@ -5,15 +5,15 @@
 	<title>ReptileForms Sample Code</title>
 
 	<style>
-	.agree {background-color: lightgray;}
-	.agree.selected { background-color: lime; }
+		.agree {background-color: lightgray; cursor: pointer;}
+		.agree.selected { background-color: lime; }
 	</style>
 
 	<!-- Optional OOCSS Structure Styles -->
 	<link rel="stylesheet" href="../dist/reptileforms.min.css">
 
 	<!-- Required JavaScript -->
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="../bower_components/jquery/dist/jquery.min.js"></script>
 	<script src="../dist/reptileforms.js"></script>
 
 	<!-- Sample Usage -->
@@ -21,35 +21,51 @@
 	$(function() {
 
 		// Use Reptile Forms
-		var form = new ReptileForm('.reptile-form', {
-			
-			// // Handle errors your way
-			// validationError: function(err) {
-			// 	alert('Error: ' + JSON.stringify(err));
-			// },
+		var form = new ReptileForm('.reptile-form');
 
-			// beforeSubmit: function() {
-			// 	alert('Sending Values: ' + JSON.stringify(this.getValues()));
-			// },
-
-			// // Handle success your way
-			// submitSuccess: function(data) {
-			// 	$('body').prepend('<p>Success</p>');
-			// }
+		/**
+		 * Remove our Silent-CAPTCHA before we attempt to validate
+		 */
+		form.on('beforeValidation', function() {
+			this.el.find('input[name="process_form"]').remove();
 		});
 
-		form.on('beforeValidation', function() {
-			console.log('Before Validation');
-			$(this).append('foo');
+		/**
+		 * Display Validation Errors
+		 */
+		form.on('validationError', function() {
+			alert('Error: ' + JSON.stringify(this.getErrors()));
+		});
+
+		/**
+		 * Show the values we're about to submit
+		 */
+		form.on('beforeSubmit', function() {
+			alert('Sending Values: ' + JSON.stringify(this.getValues()));
+			this.el.addClass('submitting');
+		});
+
+		/**
+		 * Show Success Message
+		 */
+		form.on('submitSuccess', function(e, data) {
+			this.el.addClass('success');
+			$('body').prepend('<p>Success</p>');
+		});
+
+		/**
+		 * Show Submit Error
+		 */
+		form.on('submitError', function(e, xhr, settings, thrownError) {
 		});
 
 		// Custom Validation for "terms"
 		form.customValidation('validateTerms', function(formField) {
 			if (!formField.find('.selected').length) {
 				this.addError('Terms', 'You must agree to terms');
-				return true;
+				return false;
 			}
-			return false;
+			return true;
 		});
 
 		// Custom Field: This has nothing to do with ReptileForms, but just
@@ -66,20 +82,19 @@
 
 	<form class="reptile-form" action="response.json" method="POST">
 		
-
-
-		<!-- Standard Fields -->
+		<!-- Standard Input Fields -->
+		<input type="hidden" name="process_form" value="true" required>
 		<input type="email" name="email" title="Email" required maxlength="100" data-exp-name="email">
 		<input type="password" name="password" title="Password" required maxlength="20" data-exp-name="password">
 		
-
+		<!-- Custom Field -->
 		<div class="field-input" data-name="terms" data-custom-validation="validateTerms">
 			<span class="agree">Agree to terms</span>
 		</div>
 
-		<button>Login</button>
-		
+		<button type="submit">Login</button>
+
 	</form>
-	
+
 </body>
 </html>
