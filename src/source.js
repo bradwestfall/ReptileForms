@@ -99,8 +99,8 @@
 			// Before Validation
 			$(self).trigger('beforeValidation');
 
-			// Validate
-			if (self.validate(this)) {
+			// Is Form Valid
+			if (self.validForm(this)) {
 
 				// Use browser's default submit
 				if (!self.settings.useAjax) return true;
@@ -275,7 +275,7 @@
 	/**
 	 * Validate
 	 */
-	rf.prototype.validate = function(form) {
+	rf.prototype.validForm = function(form) {
 		
 		// Setup
 		var self = this;
@@ -319,8 +319,8 @@
 			}
 			
 		});
-getErrors()
-		return validForm;
+
+		return $.isEmptyObject(self.getErrors());
 
 	}
 

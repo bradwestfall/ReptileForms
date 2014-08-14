@@ -61,11 +61,12 @@
 
 		// Custom Validation for "terms"
 		form.customValidation('validateTerms', function(formField) {
+			var selected = true
 			if (!formField.find('.selected').length) {
 				this.addError('Terms', 'You must agree to terms');
-				return false;
+				selected = false;
 			}
-			return true;
+			return selected;
 		});
 
 		// Custom Field: This has nothing to do with ReptileForms, but just
