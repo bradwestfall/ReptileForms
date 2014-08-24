@@ -47,8 +47,8 @@ Calling ReptileForm() will change the DOM as follows:
 	</div>
 	<button>Submit</button>
 </form>
-ReptileForms seeks out standard form fields and gives them new containers for styling purposes.
 ```
+ReptileForms seeks out standard form fields and gives them new containers for styling purposes.
 > Notice that the `title` attribute was used to create our `<label>` and was removed form the `<input>` field. Then we made a field container: `<div class="field first_name required text">` with convenient classname hooks.
 
 ## Basic Fields
