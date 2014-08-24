@@ -1,25 +1,18 @@
 # ReptileForms
-> Easy-to-use unopinionated forms and validation
+> Extensible, unopinionated forms and validation
 
-This code requires jQuery `^1.7.0`
+## Overview
+ReptileForms serves two main purposes:
+- Provide timely event emitters and a common validation workflow
+- Extend common and custom input fields with DOM that can be stylized your way
 
 ## Install
+### Bower
 ```sh
 $ bower install ReptileForms --save
 ```
-
-## Features
-- Use standard `<form>` and `<input>` tags with standard attributes
- - ReptileForms will make adjustments with it's settings to turn your forms into ReptileForms
-- AJAX submissions by default
- - Easy callbacks to override
-- Built-in validation
- - Use built in regular expressions or provide your own
-- OOCSS Approach
- - Structure Styles provided separatly from Design Styles
- - Optional Design themes coming soon
-- Custom Fields and/or Custom Validation on a per-field basis
- - Custom fields can include "composite fields" - see below in Custom Fields
+### Dependencies
+jQuery `^1.7.0`
 
 ## Basic Usage
 ###JS
