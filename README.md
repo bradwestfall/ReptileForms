@@ -9,14 +9,14 @@ ReptileForms serves two main purposes:
 ## Install
 ### Bower
 ```sh
-$ bower install ReptileForms --save
+$ bower install --save ReptileForms
 ```
 ### Dependencies
 jQuery `^1.7.0`
 
 ## Basic Usage
 ###JS
-Initialize ReptileForms by passing a DOM selector to reference the form(s) you want to target
+Initialize ReptileForms by calling `ReptileForm([css selector], [settings])`
 ```js
 var form = new ReptileForm('form');
 ```
@@ -55,9 +55,46 @@ ReptileForms seeks out standard form fields and gives them new containers for st
 
 Notice that the `title` attribute was used to create our `<label>` and was removed form the `<input>` field. Each field has an overall new container: `<div class="field first_name required text">` with convenient styling hooks.
 
-The default method for ReptileForms is POST which you can override with a `method` attribute on the form. ReptileForms will also use AJAX submission by default and will use the form's `action` attribute as a destination. The `action` attribute is required. 
-
 `required` attributes are used to denote a field's requiredness. However ReptileForms will use custom validation and will remove them by default. This can be overridden.
+
+## AJAX
+
+The default method for ReptileForms is POST which you can override with a `method` attribute on the form. ReptileForms will also use AJAX submission by default and will use the form's `action` attribute as a destination. The `action` attribute is required when ReptileForms is in AJAX submission mode. This can be overridden as follows:
+```js
+var form = new ReptileForm('form', {
+	xhr: false
+});
+```
+
+## Regular Expressions
+
+ReptileForms allows developers to submit their own list of regular expressions. Each Expression will have a name, a message for errors, and a regular expression rule.
+
+By default, ReptileForms has two expressions in the list named: `email` and `password`. The list of regular expressions can be modified as follows:
+```js
+// Setting can be overridden as follows:
+var form = new ReptileForm('form', {
+	expressions: {
+		'zip': {'rule': /^[0-9]{5}$/, 'msg': 'Invalid Zip Code'}
+	}
+});
+```
+> In this case `zip` is the name
+
+To apply a regular expression to a field in your form, use the `data-exp-name` attribute as follows:
+```html
+<form action="/process">
+
+	<!-- Built-in expressions for 'email' and 'password' -->
+	<input type="text" name="email" title="Email" required data-exp-name="email">
+	<input type="password" name="password" title="Password" required data-exp-name="password">
+	
+	<!-- Developer supplied expression for 'zip' -->
+	<input type="text" name="zip" title="Zip" required data-exp-name="zip" max-length="5">
+	<button type="submit">Submit</button>
+</form>
+```
+> Note that for good UX, you should probably also provide `max-length` attributes where nessesary
 
 ## Events
 It's your world, we just live in it. ReptileForms has no opinions on how you should handle errors, successes, and other events. The following events can be hooked into with callbacks to provide you with ultimate flexibility:
@@ -128,7 +165,7 @@ ReptileForms will still need to build some DOM around your custom field, but sin
 	</div>
 </form>
 ```
-###Custom Validation
+###Custom Field Validation
 
 Custom fields also require custom validation written by you. As you can see from above, when you create your `.field-input` container, you will also need to provide a `data-custom-validation` attribute to specify a function name. Then you can register that function with ReptileForms as follows:
 ```js
