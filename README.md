@@ -58,15 +58,38 @@ It's your world, we just live in it. ReptileForms has no opinions on how you sho
 - `beforeValidation` - Called just before the form starts to validate
 - `validationError` - Called if there were errors during client-side validation
 - `beforeSubmit` - Called just after validation was successful and before the form submits
-- `submitSuccess` - Called when the AJAX submission has returned successfuly 
-- `submitError` - Called when the AJAX submission has returned with an error
+- `xhrSuccess` - Called when the AJAX submission has returned successfuly 
+- `xhrError` - Called when the AJAX submission has returned with an error
 
+###Event Examples
+```js
+var form = new ReptileForm('form');
 
+// Do something before validation starts
+form.on('beforeValidation', function() {
+	...
+});
 
+// Do something when errors are detected.
+form.on('validationError', function(e, err) {
+	...
+});
 
+// Do something after validation is successful, but before the form submits.
+form.on('beforeSubmit', function() {
+	...
+});
 
+// Do something when the AJAX request has returned in success
+form.on('xhrSuccess', function(e, data) {
+	...
+});
 
-
+// Do something when the AJAX request has returned with an error
+form.on('xhrError', function(e, xhr, settings, thrownError) {
+	...
+});
+```
 
 
 
