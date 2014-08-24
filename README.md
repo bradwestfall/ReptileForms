@@ -135,7 +135,7 @@ Custom fields also require custom validation written by you. As you can see from
 var form = new ReptileForm();
 
 form.customValidation('validateTerms', function(formField) {
-	...
+	// Notice that the first parameter we will give you (formField) is a jQuery
+	// object referencing the .field node of your custom field. 
 });
 ```
-> Notice that the first parameter we will give you (formField) is a jQuery object referencing the `.field` node of your custom field. 
