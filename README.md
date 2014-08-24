@@ -62,7 +62,7 @@ Notice that the `title` attribute was used to create our `<label>` and was remov
 The default method for ReptileForms is POST which you can override with a `method` attribute on the form. ReptileForms will also use AJAX submission by default and will use the form's `action` attribute as a destination. The `action` attribute is required when ReptileForms is in AJAX submission mode. This can be overridden as follows:
 ```js
 var form = new ReptileForm('form', {
-	xhr: true
+	xhr: false
 });
 ```
 
@@ -70,7 +70,7 @@ var form = new ReptileForm('form', {
 
 ReptileForms allows developers to submit their own list of regular expressions. Each Expression will have a name, a message for errors, and a regular expression rule.
 
-By default, ReptileForms has two expressions in the list named: `email` and `password`. The list of Regular Expressions can be modified as follows:
+By default, ReptileForms has two expressions in the list named: `email` and `password`. The list of regular expressions can be modified as follows:
 ```js
 // Setting can be overridden as follows:
 var form = new ReptileForm('form', {
