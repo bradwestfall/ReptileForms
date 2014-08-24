@@ -9,7 +9,7 @@ ReptileForms serves two main purposes:
 ## Install
 ### Bower
 ```sh
-$ bower install ReptileForms --save
+$ bower install --save ReptileForms
 ```
 ### Dependencies
 jQuery `^1.7.0`
@@ -55,9 +55,25 @@ ReptileForms seeks out standard form fields and gives them new containers for st
 
 Notice that the `title` attribute was used to create our `<label>` and was removed form the `<input>` field. Each field has an overall new container: `<div class="field first_name required text">` with convenient styling hooks.
 
-The default method for ReptileForms is POST which you can override with a `method` attribute on the form. ReptileForms will also use AJAX submission by default and will use the form's `action` attribute as a destination. The `action` attribute is required. 
+The default method for ReptileForms is POST which you can override with a `method` attribute on the form. ReptileForms will also use AJAX submission by default and will use the form's `action` attribute as a destination. The `action` attribute is required when ReptileForms is in AJAX mode. Ajax mode can be overridden
 
 `required` attributes are used to denote a field's requiredness. However ReptileForms will use custom validation and will remove them by default. This can be overridden.
+
+## Settings
+
+Currently, ReptileForms only has two settings:
+
+### xhr
+```json
+{
+			xhr: true,
+			expressions: {
+				'email': {'rule':'/^[a-zA-Z0-9._-]+@[\.a-zA-Z0-9-]+\.[a-zA-Z.]{2,5}$/','msg':'Invalid Email.'},
+				'password': {'rule':'/^[\040-\176]{6,}$/','msg':'Invalid Password, Must be at least 6 characters.'}
+			}
+		}
+```
+
 
 ## Events
 It's your world, we just live in it. ReptileForms has no opinions on how you should handle errors, successes, and other events. The following events can be hooked into with callbacks to provide you with ultimate flexibility:
@@ -128,7 +144,7 @@ ReptileForms will still need to build some DOM around your custom field, but sin
 	</div>
 </form>
 ```
-###Custom Validation
+###Custom Field Validation
 
 Custom fields also require custom validation written by you. As you can see from above, when you create your `.field-input` container, you will also need to provide a `data-custom-validation` attribute to specify a function name. Then you can register that function with ReptileForms as follows:
 ```js
