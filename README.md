@@ -52,9 +52,12 @@ ReptileForms will extend your DOM with some new containers for each field
 </form>
 ```
 ReptileForms seeks out standard form fields and gives them new containers for styling purposes.
-> Notice that the `title` attribute was used to create our `<label>` and was removed form the `<input>` field. Each field has an overall new container: `<div class="field first_name required text">` with convenient styling hooks.
+
+Notice that the `title` attribute was used to create our `<label>` and was removed form the `<input>` field. Each field has an overall new container: `<div class="field first_name required text">` with convenient styling hooks.
 
 The default method for ReptileForms is POST which you can override with a `method` attribute on the form. ReptileForms will also use AJAX submission by default and will use the form's `action` attribute as a destination. The `action` attribute is required. 
+
+`required` attributes are used to denote a field's requiredness. However ReptileForms will use custom validation and will remove them by default. This can be overriden.
 
 ## Events
 It's your world, we just live in it. ReptileForms has no opinions on how you should handle errors, successes, and other events. The following events can be hooked into with callbacks to provide you with ultimate flexibility:
