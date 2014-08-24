@@ -96,7 +96,7 @@ form.on('xhrError', function(e, xhr, settings, thrownError) {
 	...
 });
 ```
-Each callback will have access to the ReptileForm object via `this` keyword. While some methods you probably wont want to call, the ones you may include:
+Each callback will have access to the ReptileForm object via `this` keyword. Common methods include:
 
 - `addError(name, title, message)`
 - `clearErrors()`
