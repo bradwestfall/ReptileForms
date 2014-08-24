@@ -66,7 +66,7 @@ The default method for ReptileForms is POST if you do not provide the method att
 
 
 ## Custom Fields
-ReptileForms was created so making custom fields is easy. With standard fields, ReptileForms will create containers for your fields. To make a custom field, you create those containers manually as follows:
+ReptileForms was created so making custom fields is easy. Compared to standard fields where ReptileForms will create containers for your fields - with custom fields you create the `field-input` container as follows:
 
 ###Initial HTML
 ```html
