@@ -16,35 +16,45 @@ jQuery `^1.7.0`
 
 ## Basic Usage
 ###JS
-Call `ReptileForm()` and pass a DOM selector to reference the form(s) you want to target
+Initialize ReptileForms by passing a DOM selector to reference the form(s) you want to target
 ```js
 var form = new ReptileForm('form');
 ```
 ###Initial HTML
-Create a standard form in HTML with standard fields and attributes.
+Create a small amount of HTML with standard fields and attributes
 ```html
 <form action="/process">
 	<input type="text" name="first_name" title="First Name" required maxlength="20">
+	<input type="text" name="last_name" title="Last Name" required maxlength="20">
 	<button type="submit">Submit</button>
 </form>
 ```
-###Resulting DOM
-Calling ReptileForm() will change the DOM as follows:
+###Extended DOM
+ReptileForms will extend your DOM with some new containers for each field
 ```html
 <form action="/process">
+
 	<div class="field first_name required text">
 		<label>First Name</label>
 		<div class="field-input">
 			<input type="text" name="first_name" maxlength="20">
 		</div>
 	</div>
-	<button>Submit</button>
+	
+	<div class="field last_name required text">
+		<label>Last Name</label>
+		<div class="field-input">
+			<input type="text" name="last_name" maxlength="20">
+		</div>
+	</div>
+	
+	<button type="submit">Submit</button>
 </form>
 ```
 ReptileForms seeks out standard form fields and gives them new containers for styling purposes.
-> Notice that the `title` attribute was used to create our `<label>` and was removed form the `<input>` field. Then we made a field container: `<div class="field first_name required text">` with convenient classname hooks.
+> Notice that the `title` attribute was used to create our `<label>` and was removed form the `<input>` field. Each field has an overall new container: `<div class="field first_name required text">` with convenient styling hooks.
 
-The default method for ReptileForms is POST if you do not provide the method attribute on the form. ReptileForms will also use an AJAX submission by default and will use the form's action attribute as a destination. 
+The default method for ReptileForms is POST which you can override with a `method` attribute on the form. ReptileForms will also use AJAX submission by default and will use the form's `action` attribute as a destination. The `action` attribute is required. 
 
 ## Events
 It's your world, we just live in it. ReptileForms has no opinions on how you should handle errors, successes, and other events. The following events can be hooked into with callbacks to provide you with ultimate flexibility:
