@@ -23,39 +23,33 @@ $ bower install ReptileForms --save
 
 ## Basic Usage
 ###JS
-Call `ReptileForm()` and pass in a selector reference to your form. Also pass in callbacks to customize how your forms will work
+Call `ReptileForm()` and pass a DOM selector to reference the form(s) you want to target
 ```js
-var form = new ReptileForm('.reptile-form', {
-	validationError: function(err) {
-		console.log(err);
-	},
-	submitSuccess: function(data) {
-		$('body').prepend('<p>Success</p>');
-	}
-});
+var form = new ReptileForm('form');
 ```
 ###Initial HTML
-Write some initial HTML. Notice that we're using a standard `input` field with standard attributes
+Create a standard form in HTML with standard fields and attributes.
 ```html
-<form class="reptile-form" action="/process" method="POST">
-	<input type="text" name="first-name" title="First Name" required maxlength="20">
-	<button>Submit</button>
+<form action="/process">
+	<input type="text" name="first_name" title="First Name" required maxlength="20">
+	<button type="submit">Submit</button>
 </form>
 ```
 ###Resulting DOM
-The resulting DOM in is as follows:
+Calling ReptileForm() will change the DOM as follows:
 ```html
-<form class="reptile-form" action="/process" method="POST">
-	<div class="field first-name required text">
-		<div class="title">First Name</div>
+<form action="/process">
+	<div class="field first_name required text">
+		<label>First Name</label>
 		<div class="field-input">
-			<input type="text" name="first-name" maxlength="20">
+			<input type="text" name="first_name" maxlength="20">
 		</div>
 	</div>
 	<button>Submit</button>
 </form>
+ReptileForms seeks out standard form fields and gives them new containers for styling purposes.
 ```
-> Notice that the `title` attribute was used to create our visual Title and was removed form the `<input>` field. Then we made a field container: `<div class="field first-name required text">` with convenient classname hooks. Also note how we left HTML untouched if it's not an input field (such as the button)
+> Notice that the `title` attribute was used to create our `<label>` and was removed form the `<input>` field. Then we made a field container: `<div class="field first_name required text">` with convenient classname hooks.
 
 ## Basic Fields
 Use `<input>`, `<select>`, or `<textarea>` tags with standard attribtues such as `name` (which we require), `type`, `reqired`, `maxlength`, etc...
