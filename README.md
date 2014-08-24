@@ -29,7 +29,7 @@ Create a small amount of HTML with standard fields and attributes
 	<button type="submit">Submit</button>
 </form>
 ```
-###Extended DOM
+###Resulting DOM
 ReptileForms will extend your DOM with some new containers for each field
 ```html
 <form action="/process">
