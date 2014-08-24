@@ -4,6 +4,7 @@ var prefix = require('gulp-autoprefixer');
 var rename = require("gulp-rename");
 var uglify = require("gulp-uglify");
 
+
 var paths = {
 	styles: ['./src/styles/**/*'],
 	scripts: ['./src/*.js']
