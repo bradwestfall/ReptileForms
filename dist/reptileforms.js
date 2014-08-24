@@ -94,14 +94,13 @@
 		if (!self.el.length) return false;
 	
 		// Settings
-		self.settings = $.extend({
+		self.settings = $.extend(true, {
 			method: 'POST',
 			action: window.location,
-			useAjax: true,
 			reptileValidation: true,
 			expressions: {
-				"email": {"rule":"\/^[a-zA-Z0-9._-]+@[\\.a-zA-Z0-9-]+\\.[a-zA-Z.]{2,5}$\/","msg":"Invalid Email."},
-				"password": {"rule":"\/^[\\040-\\176]{6,30}$\/","msg":"Invalid Password, Must be between 6 and 30 characters."}
+				'email': {'rule':'/^[a-zA-Z0-9._-]+@[\.a-zA-Z0-9-]+\.[a-zA-Z.]{2,5}$/','msg':'Invalid Email.'},
+				'password': {'rule':'/^[\040-\176]{6,}$/','msg':'Invalid Password, Must be at least 6 characters.'}
 			}
 		}, s);
 
@@ -138,9 +137,6 @@
 
 			// Is Form Valid
 			if (self.validForm(this)) {
-
-				// Use browser's default submit
-				if (!self.settings.useAjax) return true;
 
 				// Before Submit
 				$(self).trigger('beforeSubmit');
@@ -328,7 +324,6 @@
 		var form = $(form);
 		self.clearErrors();
 		self.clearValues();
-
 
 		// Start New Form Validation
 		form.find('.field').each(function() {

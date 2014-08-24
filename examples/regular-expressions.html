@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>ReptileForms Sample Code</title>
+
+	<!-- Example Dependencies -->
+	<link rel="stylesheet" href="../dist/reptileforms.min.css">
+	<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="../dist/reptileforms.js"></script>
+
+	<script>
+	$(function() {
+
+		// Pass in additional settings into ReptileForms including
+		// expressions. Note that each expression is named and names
+		// can be applied to fields via data-exp-name attributes
+		var form = new ReptileForm('form', {
+			expressions: {
+				'zip': {'rule': '/^[0-9]{5}$/', 'msg': 'Invalid Zip Code'}
+			}
+		});
+
+		// Do something when errors are detected.
+		form.on('validationError', function(e, err) {
+			$('body').append('<p>Errors: ' + JSON.stringify(err) + '</p>');
+		});
+
+	});
+	</script>
+
+</head>
+<body>
+
+	<p>Use <em>data-exp-name</em> attributes to apply regular expression names.
+	Regular expressions can be registered with the initiation of the ReptileForm object</p>
+	<form class="reptile-form" action="response.json">
+		<input type="text" name="email" title="Email" required data-exp-name="email">
+		<input type="password" name="password" title="Password" required data-exp-name="password">
+		<input type="text" name="zip" title="Zip" required data-exp-name="zip" max-length="5">
+		<button type="submit">Submit</button>
+	</form>
+	
+</body>
+</html>
