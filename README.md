@@ -51,45 +51,52 @@ Calling ReptileForm() will change the DOM as follows:
 ReptileForms seeks out standard form fields and gives them new containers for styling purposes.
 > Notice that the `title` attribute was used to create our `<label>` and was removed form the `<input>` field. Then we made a field container: `<div class="field first_name required text">` with convenient classname hooks.
 
-## Basic Fields
-Use `<input>`, `<select>`, or `<textarea>` tags with standard attribtues such as `name` (which we require), `type`, `reqired`, `maxlength`, etc...
+The default method for ReptileForms is POST if you do not provide the method attribute on the form. ReptileForms will also use an AJAX submission by default and will use the form's action attribute as a destination. 
 
-## Field Attributes
-Besides using standard attributes which will work as expected, use these attributes for additional ReptileForms functionality:
-- `title` Will be used as a visual title and also for error message titles
-- `data-exp-name` The name of the regular expression to use in validation
-- `data-custom-validation` The name of a function to be used for this field's validation. This serves as a replacement to ReptileForms' default validation
+
+
+
+
+
+
+
+
+
+
+
 
 ## Custom Fields
-ReptileForms was created with custom fields in mind.
+ReptileForms was created so making custom fields is easy. With standard fields, ReptileForms will create containers for your fields. To make a custom field, you create those containers manually as follows:
 
 ###Initial HTML
-You can create custom fields by wraping your field in a `<div class="field-input">` element. Every field in ReptileForms must have a name (to be submitted over HTTP) but since div tags don't technically support the `name` attribute, we will use `data-name` instead. Also notice that we're providing a reference to custom validation for this field. `validateTerms` is a function name that we will register with ReptileForms (See JS below).
 ```html
-<form class="reptile-form" action="/process" method="POST">
-	<div class="field-input" data-name="terms" data-custom-validation="validateTerms">
-		<span class="agree">Agree to terms</span>
+<form action="/process">
+	<div class="field-input" data-name="terms" data-custom-validation="validateTerms" title="Agree">
+		<span class="agree">Click Here to agree to terms</span>
 	</div>
 </form>
 ```
+> Note how the `<div class="field-input">...</div>` is created by you here in this custom field. You will also have to give your field a name but since the `name` attribute is only allowed on standard input elements, you will need to use `data-name`. The last part is to specify a function name with `data-custom-validation`. We'll dive more into that in a moment.
+
 ###Resulting DOM
-ReptileForms will build the `<div class="field">` wrapper (and this time without a `<div class="title">` because there was no title attribute supplied.
+ReptileForms will still need to build some DOM around your custom field, but since you wrote your own  `<div class="field-input">...</div>`, it's contents will be left as-is.
 ```html
-<form class="reptile-form" action="/process" method="POST">
+<form action="/process">
 	<div class="field terms">
+		<label>Terms</label>
 		<div class="field-input">
-			<span class="agree">Agree to terms</span>
+			<span class="agree">Click Here to agree to terms</span>
 		</div>
 	</div>
 </form>
 ```
 ###Register Custom Validation
-After you've called `ReptileForm()`, you can use the object your given to prototype new (or replacement) functions as follows.
+With your ReptileForm object, you can augment custom validation methods as follows:
 ```js
-var form = new ReptileForm(/* Start Reptile Forms */);
+var form = new ReptileForm();
 
-// Register Custom Error Handling
-form.validateTerms = function(formField) {
-}
+form.customValidation('validateTerms', function(formField) {
+	...
+});
 ```
-> Note that formField is a jQuery object referencing the `<div class="field">` that is being validated
+> Notice that the first parameter you will have access to (formField) is a jQuery object referencing the `.field` node of your custom field. 
