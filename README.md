@@ -1,101 +1,148 @@
 # ReptileForms
-> Easy-to-use unopinionated forms and validation
+> Extensible, unopinionated forms and validation
 
-This code requires jQuery `^1.7.0`
+## Overview
+ReptileForms serves two main purposes:
+- Provide timely event emitters and a common validation workflow
+- Extend common and custom input fields with DOM that can be stylized your way
 
 ## Install
+### Bower
 ```sh
 $ bower install ReptileForms --save
 ```
-
-## Features
-- Use standard `<form>` and `<input>` tags with standard attributes
- - ReptileForms will make adjustments with it's settings to turn your forms into ReptileForms
-- AJAX submissions by default
- - Easy callbacks to override
-- Built-in validation
- - Use built in regular expressions or provide your own
-- OOCSS Approach
- - Structure Styles provided separatly from Design Styles
- - Optional Design themes coming soon
-- Custom Fields and/or Custom Validation on a per-field basis
- - Custom fields can include "composite fields" - see below in Custom Fields
+### Dependencies
+jQuery `^1.7.0`
 
 ## Basic Usage
 ###JS
-Call `ReptileForm()` and pass in a selector reference to your form. Also pass in callbacks to customize how your forms will work
+Initialize ReptileForms by passing a DOM selector to reference the form(s) you want to target
 ```js
-var form = new ReptileForm('.reptile-form', {
-	validationError: function(err) {
-		console.log(err);
-	},
-	submitSuccess: function(data) {
-		$('body').prepend('<p>Success</p>');
-	}
+var form = new ReptileForm('form');
+```
+###Initial HTML
+Create a small amount of HTML with standard fields and attributes
+```html
+<form action="/process">
+	<input type="text" name="first_name" title="First Name" required maxlength="20">
+	<input type="text" name="last_name" title="Last Name" required maxlength="20">
+	<button type="submit">Submit</button>
+</form>
+```
+###Resulting DOM
+ReptileForms will extend your DOM with some new containers for each field
+```html
+<form action="/process">
+
+	<div class="field first_name required text">
+		<label>First Name</label>
+		<div class="field-input">
+			<input type="text" name="first_name" maxlength="20">
+		</div>
+	</div>
+	
+	<div class="field last_name required text">
+		<label>Last Name</label>
+		<div class="field-input">
+			<input type="text" name="last_name" maxlength="20">
+		</div>
+	</div>
+	
+	<button type="submit">Submit</button>
+</form>
+```
+ReptileForms seeks out standard form fields and gives them new containers for styling purposes.
+
+Notice that the `title` attribute was used to create our `<label>` and was removed form the `<input>` field. Each field has an overall new container: `<div class="field first_name required text">` with convenient styling hooks.
+
+The default method for ReptileForms is POST which you can override with a `method` attribute on the form. ReptileForms will also use AJAX submission by default and will use the form's `action` attribute as a destination. The `action` attribute is required. 
+
+`required` attributes are used to denote a field's requiredness. However ReptileForms will use custom validation and will remove them by default. This can be overridden.
+
+## Events
+It's your world, we just live in it. ReptileForms has no opinions on how you should handle errors, successes, and other events. The following events can be hooked into with callbacks to provide you with ultimate flexibility:
+- `beforeValidation` - Called just before the form starts to validate
+- `validationError` - Called if there were errors during client-side validation
+- `beforeSubmit` - Called just after validation was successful and before the form submits
+- `xhrSuccess` - Called when the AJAX submission has returned successfuly 
+- `xhrError` - Called when the AJAX submission has returned with an error
+
+###Event Examples
+```js
+var form = new ReptileForm('form');
+
+// Do something before validation starts
+form.on('beforeValidation', function() {
+	...
+});
+
+// Do something when errors are detected.
+form.on('validationError', function(e, err) {
+	...
+});
+
+// Do something after validation is successful, but before the form submits.
+form.on('beforeSubmit', function() {
+	...
+});
+
+// Do something when the AJAX request has returned in success
+form.on('xhrSuccess', function(e, data) {
+	...
+});
+
+// Do something when the AJAX request has returned with an error
+form.on('xhrError', function(e, xhr, settings, thrownError) {
+	...
 });
 ```
-###Initial HTML
-Write some initial HTML. Notice that we're using a standard `input` field with standard attributes
-```html
-<form class="reptile-form" action="/process" method="POST">
-	<input type="text" name="first-name" title="First Name" required maxlength="20">
-	<button>Submit</button>
-</form>
-```
-###Resulting DOM
-The resulting DOM in is as follows:
-```html
-<form class="reptile-form" action="/process" method="POST">
-	<div class="field first-name required text">
-		<div class="title">First Name</div>
-		<div class="field-input">
-			<input type="text" name="first-name" maxlength="20">
-		</div>
-	</div>
-	<button>Submit</button>
-</form>
-```
-> Notice that the `title` attribute was used to create our visual Title and was removed form the `<input>` field. Then we made a field container: `<div class="field first-name required text">` with convenient classname hooks. Also note how we left HTML untouched if it's not an input field (such as the button)
+Each callback will have access to the ReptileForm object via `this` keyword. Common methods include:
 
-## Basic Fields
-Use `<input>`, `<select>`, or `<textarea>` tags with standard attribtues such as `name` (which we require), `type`, `reqired`, `maxlength`, etc...
-
-## Field Attributes
-Besides using standard attributes which will work as expected, use these attributes for additional ReptileForms functionality:
-- `title` Will be used as a visual title and also for error message titles
-- `data-exp-name` The name of the regular expression to use in validation
-- `data-custom-validation` The name of a function to be used for this field's validation. This serves as a replacement to ReptileForms' default validation
+- `addError(name, title, message)`
+- `clearErrors()`
+- `getErrors()`
+- `getValues()`
 
 ## Custom Fields
-ReptileForms was created with custom fields in mind.
+ReptileForms was created so making custom fields is easy. Compared to standard fields where ReptileForms will create containers for your fields - with custom fields you create the `field-input` manually to indicate a custom field:
 
 ###Initial HTML
-You can create custom fields by wraping your field in a `<div class="field-input">` element. Every field in ReptileForms must have a name (to be submitted over HTTP) but since div tags don't technically support the `name` attribute, we will use `data-name` instead. Also notice that we're providing a reference to custom validation for this field. `validateTerms` is a function name that we will register with ReptileForms (See JS below).
 ```html
-<form class="reptile-form" action="/process" method="POST">
-	<div class="field-input" data-name="terms" data-custom-validation="validateTerms">
-		<span class="agree">Agree to terms</span>
+<form action="/process">
+	<div class="field-input" data-name="terms" data-custom-validation="validateTerms" title="Terms">
+		<span class="agree">Click Here to agree to terms</span>
 	</div>
 </form>
 ```
+> With the `.field-input` container you create, you will also need to provide a name for your custom field. But since the `name` attribute is only allowed on standard input elements by the W3, you will need to use `data-name` instead (only for custom fields). 
+
 ###Resulting DOM
-ReptileForms will build the `<div class="field">` wrapper (and this time without a `<div class="title">` because there was no title attribute supplied.
+ReptileForms will still need to build some DOM around your custom field, but since you wrote your own  `<div class="field-input">...</div>`, its contents will be left as-is.
 ```html
-<form class="reptile-form" action="/process" method="POST">
+<form action="/process">
 	<div class="field terms">
+		<label>Terms</label>
 		<div class="field-input">
-			<span class="agree">Agree to terms</span>
+			<span class="agree">Click Here to agree to terms</span>
 		</div>
 	</div>
 </form>
 ```
-###Register Custom Validation
-After you've called `ReptileForm()`, you can use the object your given to prototype new (or replacement) functions as follows.
-```js
-var form = new ReptileForm(/* Start Reptile Forms */);
+###Custom Validation
 
-// Register Custom Error Handling
-form.validateTerms = function(formField) {
-}
+Custom fields also require custom validation written by you. As you can see from above, when you create your `.field-input` container, you will also need to provide a `data-custom-validation` attribute to specify a function name. Then you can register that function with ReptileForms as follows:
+```js
+var form = new ReptileForm();
+
+form.customValidation('validateTerms', function(formField) {
+	// Notice that the first parameter we will give you (formField) is a jQuery
+	// object referencing the .field node of your custom field. 
+	
+	// Here is where you will conduct your custom field's validation. If you found
+	// an error, log it with:
+	this.addError('Title', 'Error Message');
+	
+	// Always return a value, the value must be the custom field's value if any
+	return true;
+});
 ```
-> Note that formField is a jQuery object referencing the `<div class="field">` that is being validated
