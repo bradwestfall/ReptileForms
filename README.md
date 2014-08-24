@@ -96,8 +96,12 @@ form.on('xhrError', function(e, xhr, settings, thrownError) {
 	...
 });
 ```
+Each callback will have access to the ReptileForm object via `this` keyword. While some methods you probably wont want to call, the ones you may include:
 
-
+- `addError(name, title, message)`
+- `clearErrors()`
+- `getErrors()`
+- `getValues()`
 
 ## Custom Fields
 ReptileForms was created so making custom fields is easy. Compared to standard fields where ReptileForms will create containers for your fields - with custom fields you create the `field-input` container as follows:
