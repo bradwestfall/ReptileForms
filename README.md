@@ -53,8 +53,13 @@ ReptileForms seeks out standard form fields and gives them new containers for st
 
 The default method for ReptileForms is POST if you do not provide the method attribute on the form. ReptileForms will also use an AJAX submission by default and will use the form's action attribute as a destination. 
 
-
-
+## Events
+It's your world, we just live in it. ReptileForms has no opinions on how you should handle errors, successes, and other events. The following events can be hooked into with callbacks to provide you with ultimate flexibility:
+- `beforeValidation` - Called just before the form starts to validate
+- `validationError` - Called if there were errors during client-side validation
+- `beforeSubmit` - Called just after validation was successful and before the form submits
+- `submitSuccess` - Called when the AJAX submission has returned successfuly 
+- `submitError` - Called when the AJAX submission has returned with an error
 
 
 
@@ -71,7 +76,7 @@ ReptileForms was created so making custom fields is easy. Compared to standard f
 ###Initial HTML
 ```html
 <form action="/process">
-	<div class="field-input" data-name="terms" data-custom-validation="validateTerms" title="Agree">
+	<div class="field-input" data-name="terms" data-custom-validation="validateTerms" title="Terms">
 		<span class="agree">Click Here to agree to terms</span>
 	</div>
 </form>
@@ -100,4 +105,4 @@ form.customValidation('validateTerms', function(formField) {
 	...
 });
 ```
-> Notice that the first parameter you will have access to (formField) is a jQuery object referencing the `.field` node of your custom field. 
+> Notice that the first parameter we will give you (formField) is a jQuery object referencing the `.field` node of your custom field. 
