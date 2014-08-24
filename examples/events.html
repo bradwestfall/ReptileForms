@@ -29,11 +29,6 @@
 			$('body').append('<p>Sending Values: ' + JSON.stringify(this.getValues()) + '</p>');
 		});
 
-		// form.submit(function(url, formValues) {
-		// 	console.log('new submit');
-		// 	return true;
-		// });
-
 		// Do something when the AJAX request has returned in success
 		form.on('xhrSuccess', function(e, data) {
 			$('body').append('<p>Received Data: ' + JSON.stringify(data) + '</p>');

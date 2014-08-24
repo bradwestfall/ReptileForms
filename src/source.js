@@ -95,9 +95,7 @@
 	
 		// Settings
 		self.settings = $.extend(true, {
-			method: 'POST',
-			action: window.location,
-			reptileValidation: true,
+			xhr: true,
 			expressions: {
 				'email': {'rule':'/^[a-zA-Z0-9._-]+@[\.a-zA-Z0-9-]+\.[a-zA-Z.]{2,5}$/','msg':'Invalid Email.'},
 				'password': {'rule':'/^[\040-\176]{6,}$/','msg':'Invalid Password, Must be at least 6 characters.'}
@@ -105,15 +103,15 @@
 		}, s);
 
 		// Use Reptile Validation
-		if (self.settings.reptileValidation) self.el.attr('novalidate', 'novalidate');
+		self.el.attr('novalidate', 'novalidate');
 
 		// Reset Errors and Values
 		self.clearErrors();
 		self.clearValues();
 
 		// Give the form a method and action if it doesn't have one
-		if (!self.el.attr('method')) self.el.attr('method', self.settings.method);
-		if (!self.el.attr('action')) self.el.attr('action', self.settings.action);
+		if (!self.el.attr('method') && self.settings.xhr) self.el.attr('method', 'POST');
+		if (!self.el.attr('action') && self.settings.xhr) console.error('ReptileForm: action attribue is required when in xhr mode');
 
 		// Render Fields
 		self.el.children('input, select, textarea, .field-input').each(function() {
@@ -141,6 +139,8 @@
 				// Before Submit
 				$(self).trigger('beforeSubmit');
 
+				if (!self.settings.xhr) return true;
+
 				// Submit Form
 				return self.submit(self.el.attr('action'), self.getValues());
 
@@ -161,7 +161,7 @@
 		var self = this;
 		$.ajax({
 			cache: false,
-			type: 'POST',
+			type: self.el.attr('method'),
 			dataType: 'JSON',
 			url: url,
 			data: formValues,
@@ -190,7 +190,7 @@
 
 		// Require Name
 		if (!name) {
-			console.error('Field removed, requires name.');
+			console.error('ReptileForm: Unknown Field removed - name attribute not given');
 			return null;
 		}
 		
@@ -263,7 +263,7 @@
 
 		// Require Name
 		if (!name) {
-			console.error('Input field removed from form. Name is required.')
+			console.error('ReptileForm: Unknown Field removed - name attribute not given')
 			return null;
 		}
 
@@ -299,7 +299,7 @@
 
 		// Require Name
 		if (!name) {
-			console.error('Field removed, requires name.')
+			console.error('ReptileForm: Unknown Hidden Field removed - name attribute not given')
 			return null;
 		}
 
@@ -374,12 +374,8 @@
 	 */
 	rf.prototype.getFieldValue = function(formField) {
 
-		// Require Name
+		// Field Name
 		var name = formField.data('name');
-		if (!name) {
-			console.error('Cannot retreive value from field. Name is required.')
-			return null;
-		}
 
 		// Otherwise, see if we can just get the value using this logic
 		var value;

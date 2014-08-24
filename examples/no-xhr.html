@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>ReptileForms Sample Code</title>
+
+	<!-- Example Dependencies -->
+	<link rel="stylesheet" href="../dist/reptileforms.min.css">
+	<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="../dist/reptileforms.js"></script>
+
+	<script>
+	$(function() {
+
+		var form = new ReptileForm('form', {
+			xhr: false
+		});
+
+		// Do something when errors are detected.
+		form.on('validationError', function(e, err) {
+			$('body').append('<p>Errors: ' + JSON.stringify(err) + '</p>');
+		});
+
+	});
+	</script>
+
+</head>
+<body>
+
+	<p>This page shows an example of how to switch ReptileForms into a non-AJAX (XHR) mode</p>
+	<form class="reptile-form" method="GET">
+		<input type="text" name="first_name" title="First Name" required>
+		<input type="text" name="last_name" title="Last Name" required>
+		<button type="submit">Submit</button>
+	</form>
+	
+</body>
+</html>
