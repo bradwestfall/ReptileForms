@@ -76,10 +76,10 @@ ReptileForms was created so making custom fields is easy. Compared to standard f
 	</div>
 </form>
 ```
-> Note how the `<div class="field-input">...</div>` is created by you here in this custom field. You will also have to give your field a name but since the `name` attribute is only allowed on standard input elements, you will need to use `data-name`. The last part is to specify a function name with `data-custom-validation`. We'll dive more into that in a moment.
+> With the `.field-input` container you create, you will also need to provide a name for your custom field. But since the `name` attribute is only allowed on standard input elements by the W3, you will need to use `data-name` instead (only for custom fields). 
 
 ###Resulting DOM
-ReptileForms will still need to build some DOM around your custom field, but since you wrote your own  `<div class="field-input">...</div>`, it's contents will be left as-is.
+ReptileForms will still need to build some DOM around your custom field, but since you wrote your own  `<div class="field-input">...</div>`, its contents will be left as-is.
 ```html
 <form action="/process">
 	<div class="field terms">
@@ -90,8 +90,9 @@ ReptileForms will still need to build some DOM around your custom field, but sin
 	</div>
 </form>
 ```
-###Register Custom Validation
-With your ReptileForm object, you can augment custom validation methods as follows:
+###Custom Validation
+
+Custom fields also require custom validation written by you. As you can see from above, when you create your `.field-input` container, you will also need to provide a `data-custom-validation` attribute to specify a function name. Then you can register that function with ReptileForms as follows:
 ```js
 var form = new ReptileForm();
 
