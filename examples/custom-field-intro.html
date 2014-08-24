@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>ReptileForms Sample Code</title>
+
+	<style>
+		.agree {background-color: lightgray; cursor: pointer;}
+		.agree.selected { background-color: lime; }
+	</style>
+
+	<!-- Example Dependencies -->
+	<link rel="stylesheet" href="../dist/reptileforms.min.css">
+	<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="../dist/reptileforms.js"></script>
+
+	<script>
+	$(function() {
+
+		// Use Reptile Forms
+		var form = new ReptileForm('.reptile-form');
+
+		// Validation Error
+		form.on('validationError', function(e, err) {
+			$('body').append('<p>Errors: ' + JSON.stringify(err) + '</p>');
+		});
+
+		// Before Submit
+		form.on('beforeSubmit', function() {
+			$('body').append('<p>Sending Values: ' + JSON.stringify(this.getValues()) + '</p>');
+		});
+
+		// Submit Success
+		form.on('submitSuccess', function(e, data) {
+			$('body').append('<p>Received Data: ' + JSON.stringify(data) + '</p>');
+		});
+
+		// Custom Validation for "terms". Note that you will need to return
+		// the value of your custom field.
+		form.customValidation('validateTerms', function(formField) {
+			var selected = true
+			if (!formField.find('.selected').length) {
+				this.addError('Terms', 'You must agree to terms');
+				selected = false;
+			}
+			return selected;
+		});
+
+		// This code just programs the behavior of our custom field. This has nothing
+		// to do with ReptileForms and is just here for example purposes.
+		$('.agree').on('click', function() {
+			$(this).toggleClass('selected');
+		});
+
+	});
+	</script>
+
+</head>
+<body>
+
+	<p>Creating custom fields is very easy with ReptileForms. Just create any DOM
+	you want wrapped in a <em>&lt;div class="field-input"&gt;</em> container. Give
+	that container a <em>data-name</em> attribute and a <em>data-custom-validation</em> attribute.
+	Then program the rules of how your custom field should validate by attaching
+	a custom function to ReptileForms. See the code of this example for more details.</p>
+	<form class="reptile-form" action="response.json" method="POST">
+		<input type="text" name="first_name" title="First Name" required>
+		<input type="text" name="last_name" title="Last Name" required>
+
+		<!-- Custom Field -->
+		<div class="field-input" data-name="terms" data-custom-validation="validateTerms">
+			<span class="agree">Click Here to agree to terms</span>
+		</div>
+
+		<button type="submit">Submit</button>
+
+	</form>
+
+</body>
+</html>

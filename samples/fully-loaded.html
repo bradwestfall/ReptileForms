@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>ReptileForms Sample Code</title>
+
+	<style>
+		.agree {background-color: lightgray; cursor: pointer;}
+		.agree.selected { background-color: lime; }
+	</style>
+
+	<!-- Optional OOCSS Structure Styles -->
+	<link rel="stylesheet" href="../dist/reptileforms.min.css">
+
+	<!-- Required JavaScript -->
+	<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="../dist/reptileforms.js"></script>
+
+	<!-- Sample Usage -->
+	<script>
+	$(function() {
+
+		// Use Reptile Forms
+		var form = new ReptileForm('.reptile-form');
+
+		/**
+		 * Remove our Silent-CAPTCHA before we attempt to validate
+		 */
+		form.on('beforeValidation', function() {
+			this.el.find('input[name="process_form"]').remove();
+		});
+
+		/**
+		 * Display Validation Errors
+		 */
+		form.on('validationError', function() {
+			alert('Error: ' + JSON.stringify(this.getErrors()));
+		});
+
+		/**
+		 * Show the values we're about to submit
+		 */
+		form.on('beforeSubmit', function() {
+			alert('Sending Values: ' + JSON.stringify(this.getValues()));
+			this.el.addClass('submitting');
+		});
+
+		/**
+		 * Show Success Message
+		 */
+		form.on('submitSuccess', function(e, data) {
+			this.el.addClass('success');
+			$('body').prepend('<p>Success</p>');
+		});
+
+		/**
+		 * Show Submit Error
+		 */
+		form.on('submitError', function(e, xhr, settings, thrownError) {
+		});
+
+		// Custom Validation for "terms"
+		form.customValidation('validateTerms', function(formField) {
+			var selected = true
+			if (!formField.find('.selected').length) {
+				this.addError('Terms', 'You must agree to terms');
+				selected = false;
+			}
+			return selected;
+		});
+
+		// Custom Field: This has nothing to do with ReptileForms, but just
+		// imagine you can make custom fields however you want
+		$('.agree').on('click', function() {
+			$(this).toggleClass('selected');
+		});
+
+	});
+	</script>
+
+</head>
+<body>
+
+	<form class="reptile-form" action="response.json" method="POST">
+		
+		<!-- Standard Input Fields -->
+		<input type="hidden" name="process_form" value="true" required>
+		<input type="email" name="email" title="Email" required maxlength="100" data-exp-name="email">
+		<input type="password" name="password" title="Password" required maxlength="20" data-exp-name="password">
+		
+		<!-- Custom Field -->
+		<div class="field-input" data-name="terms" data-custom-validation="validateTerms">
+			<span class="agree">Agree to terms</span>
+		</div>
+
+		<button type="submit">Login</button>
+
+	</form>
+
+</body>
+</html>

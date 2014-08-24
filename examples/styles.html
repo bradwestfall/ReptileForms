@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>ReptileForms Sample Code</title>
+
+	<!-- Example Dependencies -->
+	<link rel="stylesheet" href="../dist/reptileforms.min.css">
+	<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="../dist/reptileforms.js"></script>
+
+	<script>
+	$(function() {
+
+		// Note that we can also use any valid CSS selector to identify which
+		// form we want to apply ReptileForms to.
+		var form = new ReptileForm('.reptile-form');
+
+	});
+	</script>
+
+</head>
+<body>
+
+	<p>This page shows how to use ReptileForm's OOCSS approach to CSS. Examine
+	the source to see the CSS file being included and notice the class name
+	'reptile-form' used to hook the CSS into the form.</p>
+	<form class="reptile-form" action="response.json">
+		<input type="text" name="first_name" title="First Name" required>
+		<input type="text" name="last_name" title="Last Name" required>
+		<button type="submit">Submit</button>
+	</form>
+	
+</body>
+</html>

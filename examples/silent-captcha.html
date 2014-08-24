@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>ReptileForms Sample Code</title>
+
+	<!-- Example Dependencies -->
+	<link rel="stylesheet" href="../dist/reptileforms.min.css">
+	<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="../dist/reptileforms.js"></script>
+
+	<script>
+	$(function() {
+
+		var form = new ReptileForm('form');
+
+		// Remove our Silent-CAPTCHA before we attempt to validate
+		form.on('beforeValidation', function() {
+			this.el.find('input[name="process_form"]').remove();
+		});
+
+		// Show the submit values (which wont have our slient-CAPTCHA)
+		form.on('beforeSubmit', function() {
+			$('body').append('<p>Sending Values: ' + JSON.stringify(this.getValues()) + '</p>');
+		});
+
+	});
+	</script>
+
+</head>
+<body>
+
+	<p>CAPTCHAs have been used for years to prevent form spamming. However they are very
+	intrucive to normal users and can sometimes be ineffective. A silent CAPTCHA is a
+	hidden field that seems important but actually tricks most spambots. Most
+	spambots will submit every field of your form in fear of hitting validation traps
+	on the server-side. So we will make a field that if submitted to us, we will know
+	that it's a bot. Therefore, as you can see above, we will remove this field just before
+	the form is submitted.</p>
+	<form class="reptile-form" action="response.json">
+		
+		<!-- Silent CAPTCHA field -->
+		<input type="hidden" name="process_form" value="true" required>
+		
+		<input type="text" name="first_name" title="First Name">
+		<input type="text" name="last_name" title="Last Name">
+		<button type="submit">Submit</button>
+
+	</form>
+	
+</body>
+</html>

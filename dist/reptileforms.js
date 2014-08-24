@@ -1,27 +1,87 @@
 !(function($, window, document, undefined) {
 	
-	// Assign Reptile Forms to multiple forms that match selector
+	/**
+	 * Start Reptile Form Objects
+	 */
 	ReptileForm = function(forms, settings) {
-		//this.forms = forms;
+		
+		// Set Form Objects 
+		this.forms = forms;
 		$(forms).each(function() {
-			$(this).data('reptile-form', new rf($(this), settings));
+			$(this).data('rf', new rf(this, settings));
 		});
-	}
 
-	// Add Custom Validation to each form
+		/**
+		 * Radio Group
+		 */
+		this.customValidation('validateRadioGroup', function(formField) {
+
+			// Get Value
+			var value = formField.find('input:checked').val();
+
+			// Field Name
+			var name = formField.data('name');
+
+			// If no value is selected
+			if (formField.data('required') && !value) this.addError(name, formField.data('title'), 'Value Is Required');
+			
+			// Return Value
+			return value;
+
+		});
+
+		/**
+		 * Checkbox Group
+		 */
+		this.customValidation('validateCheckboxGroup', function(formField) {
+
+			// Collect Values
+			var values = $('input[type="checkbox"]:checked').map(function(){
+				return $(this).val();
+			}).get();
+
+			// Field Name
+			var name = formField.data('name');
+
+			// If no value is selected
+			if (formField.data('required') && !values.length) this.addError(name, formField.data('title'), 'Value Is Required');
+		
+			// Return Values
+			return values;
+
+		});
+
+	}
+	
+	/**
+	 * Register Custom Validation
+	 */
 	ReptileForm.prototype.customValidation = function(f, cb) {
 		$(this.forms).each(function() {
-			$(this).data('reptile-form')[f] = cb;
+			$(this).data('rf').customValidation[f] = cb;
 		});
 	}
 
-	// Reptile Form
-	var rf = function(el, settings) {
+	/**
+	 * Register Event Emitter
+	 */
+	ReptileForm.prototype.on = function(e, cb) {
+		$(this.forms).each(function() {
+			var rf = $(this).data('rf');
+			$(rf).on(e, cb);
+		});
+	}
+
+	/**
+	 * Reptile Form
+	 */
+	rf = function(el, s) {
 
 		// Setup
 		var self = this;
-		self.el = el;
-		if (!self.el.length) { return false; }
+		self.customValidation = [];
+		self.el = $(el);
+		if (!self.el.length) return false;
 	
 		// Settings
 		self.settings = $.extend({
@@ -33,13 +93,23 @@
 				"email": {"rule":"\/^[a-zA-Z0-9._-]+@[\\.a-zA-Z0-9-]+\\.[a-zA-Z.]{2,5}$\/","msg":"Invalid Email."},
 				"password": {"rule":"\/^[\\040-\\176]{6,30}$\/","msg":"Invalid Password, Must be between 6 and 30 characters."}
 			},
-			ready: function() {},
-			beforeValidation: function() {},
-			validationError: function() {},
-			beforeSubmit: function() {},
-			submitSuccess: function() {},
-			submitError: function() {}
-		}, settings);
+			submitForm: function(url, formValues) {
+				var rf = this;
+				$.ajax({
+					cache: false,
+					type: 'POST',
+					dataType: 'JSON',
+					url: url,
+					data: formValues,
+					success: function(data) {
+						$(rf).trigger('submitSuccess', data);
+					},
+					error: function(xhr, settings, thrownError) {
+						$(rf).trigger('submitError', xhr, settings, thrownError);
+					}
+				});
+			}
+		}, s);
 
 		// Use Reptile Validation
 		if (self.settings.reptileValidation) self.el.attr('novalidate', 'novalidate');
@@ -48,9 +118,9 @@
 		self.clearErrors();
 		self.clearValues();
 
-		// Setup Method and Action
-		if (!self.el.attr('method')) { self.el.attr('method', self.settings.method); }
-		if (!self.el.attr('action')) { self.el.attr('action', self.settings.action); }
+		// Give the form a method and action if it doesn't have one
+		if (!self.el.attr('method')) self.el.attr('method', self.settings.method);
+		if (!self.el.attr('action')) self.el.attr('action', self.settings.action);
 
 		// Render Fields
 		self.el.children('input, select, textarea, .field-input').each(function() {
@@ -58,45 +128,40 @@
 			var field = $(this);
 			switch(true) {
 				case field.attr('type') == 'hidden':
-					self.renderFieldHidden(field); break;
+					self.renderHiddenField(field); break;
 				case field.hasClass('field-input'):
 					field.replaceWith(self.renderCustomField(field)); break;
 				default:
 					field.replaceWith(self.renderField(field));
 			}
 		});
-
-		// Submit Form
+		
+		// Handle Submit Form
 		self.el.on('submit', function() {
 
 			// Before Validation
-			if ($.isFunction(self.settings.beforeValidation)) {
-				if (false === self.settings.beforeValidation.call(self)) return false;
-			}
+			$(self).trigger('beforeValidation');
 
-			// Validate
-			if (self.validate()) {
+			// Is Form Valid
+			if (self.validForm(this)) {
 
 				// Use browser's default submit
 				if (!self.settings.useAjax) return true;
 
 				// Before Submit
-				if ($.isFunction(self.settings.beforeSubmit)) {
-					if (false === self.settings.beforeSubmit.call(self)) return false;
-				}
+				$(self).trigger('beforeSubmit');
 
 				// Submit Form
-				self.submitForm.call(self, self.el.attr('action'), self.getValues());
+				self.settings.submitForm.call(self, self.el.attr('action'), self.getValues());
 				return false;
 
 			// Validation Failed
 			} else {
+				$(self).trigger('validationError', [self.getErrors()]);
 				return false;
 			}
-		});
 
-		// Ready
-		if ($.isFunction(self.settings.ready)) { self.settings.ready.call(self); }
+		});
 
 	}
 
@@ -119,7 +184,7 @@
 
 		// Require Name
 		if (!name) {
-			console.error('Field removed, requires name.')
+			console.error('Field removed, requires name.');
 			return null;
 		}
 		
@@ -150,7 +215,7 @@
 			.addClass(name)
 			.addClass(required ? 'required' : null)
 			.addClass(fieldType)
-			.append(title ? '<div class="title">' + title + '</div>' : null)
+			.append(title ? '<label>' + title + '</label>' : null)
 			.append(fieldInput);
 
 	}
@@ -187,9 +252,8 @@
 
 		}
 
-
-		var title = originalField.attr('title') || name;
-		//var expressionName = originalField.data('exp-name') || null;
+		// Title
+		var title = originalField.attr('title');
 
 		// Require Name
 		if (!name) {
@@ -199,20 +263,19 @@
 
 		// Make new Field Input
 		var fieldInput = $(originalField[0].outerHTML);
-		fieldInput.removeAttr('data-title data-name data-required data-exp-name data-type data-custom-validation');
+		fieldInput.removeAttr('data-name data-required data-type data-custom-validation');
 
 		// Make field container
 		return $(document.createElement('div'))
 			.data('name', name)
 			.data('title', title)
-			//.data('exp-name', expressionName)
 			.data('custom-validation', customValidation)
 			.data('required', required)
 			.addClass('field')
 			.addClass(name)
 			.addClass(required ? 'required' : null)
 			.addClass(fieldType)
-			.append(title ? '<div class="title">' + title + '</div>' : null)
+			.append(title ? '<label>' + title + '</label>' : null)
 			.append(fieldInput);
 
 	}
@@ -220,7 +283,7 @@
 	/**
 	 * Render Field Hidden
 	 */
-	rf.prototype.renderFieldHidden = function(field) {
+	rf.prototype.renderHiddenField = function(field) {
 		
 		// Setup
 		var self = this;
@@ -253,15 +316,18 @@
 	/**
 	 * Validate
 	 */
-	rf.prototype.validate = function() {
+	rf.prototype.validForm = function(form) {
 		
 		// Setup
 		var self = this;
+		var form = $(form);
 		self.clearErrors();
 		self.clearValues();
 
+
 		// Start New Form Validation
-		self.el.find('.field').each(function() {
+		form.find('.field').each(function() {
+
 			var value = '';
 			var formField = $(this);
 			var title = formField.data('title');
@@ -269,8 +335,8 @@
 
 			// Custom Validation
 			var customValidation = formField.data('custom-validation');
-			if (customValidation && $.isFunction(self[customValidation])) {
-				value = self[customValidation](formField);
+			if (customValidation && $.isFunction(self.customValidation[customValidation])) {
+				value = self.customValidation[customValidation].call(self, formField);
 				self.storeValue(name, value);
 				return;
 			}
@@ -280,7 +346,10 @@
 			self.storeValue(name, value);
 
 			// Validate Requiredness
-			if (formField.data('required') && !value) {
+			if (!formField.data('required') && value == null) {
+				return;
+
+			} else if (formField.data('required') && !value) {
 				self.addError(name, title, 'Value is required');
 				return;
 			}
@@ -296,13 +365,7 @@
 			
 		});
 
-		// If there were errors, call validationError
-		if (!$.isEmptyObject(self.getErrors())) {
-			if ($.isFunction(self.settings.validationError)) { self.settings.validationError.call(self, self.getErrors()) };
-			return false;
-		} else {
-			return true;
-		}
+		return $.isEmptyObject(self.getErrors());
 
 	}
 
@@ -329,78 +392,6 @@
 
 		return value;
 
-	}
-
-	/***********************************
-	  CUSTOM FIELD VALIDATION
-	************************************/
-
-	/**
-	 * Radio Group
-	 */
-	rf.prototype.validateRadioGroup = function(formField) {
-
-		// Get Value
-		var value = formField.find('input:checked').val();
-
-		// Store Values
-		var name = formField.data('name');
-		this.storeValue(name, value);
-
-		if (formField.data('required') && !value) {
-			this.addError(name, formField.data('title'), 'Value Is Required');
-			return false;
-		}
-		
-		return value;
-
-	}
-	
-	/**
-	 * Checkbox Group
-	 */
-	rf.prototype.validateCheckboxGroup = function(formField) {
-		
-		// Collect Values
-		var values = $('input[type="checkbox"]:checked').map(function(){
-			return $(this).val();
-		}).get();
-
-		// Store Values
-		var name = formField.data('name');
-		this.storeValue(name, values);
-
-		if (formField.data('required') && !values.length) {
-			this.addError(name, formField.data('title'), 'Value Is Required');
-			return false;
-		}
-		
-		return values;
-
-	}
-
-	/***********************************
-	  SUBMIT FORM
-	************************************/
-
-	/**
-	 * Submit via Ajax
-	 */
-	rf.prototype.submitForm = function(url, formValues) {
-		var self = this;
-		$.ajax({
-			cache: false,
-			type: 'POST',
-			dataType: 'JSON',
-			url: url,
-			data: formValues,
-			success: function(data) {
-				if ($.isFunction(self.settings.submitSuccess)) { self.settings.submitSuccess.call(self, data); }
-			},
-			error: function(xhr, settings, thrownError) {
-				if ($.isFunction(self.settings.submitError)) { self.settings.submitError.call(self, xhr, settings, thrownError); }
-			}
-		});
 	}
 
 	/***********************************
