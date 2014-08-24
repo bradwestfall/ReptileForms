@@ -57,7 +57,7 @@ Notice that the `title` attribute was used to create our `<label>` and was remov
 
 The default method for ReptileForms is POST which you can override with a `method` attribute on the form. ReptileForms will also use AJAX submission by default and will use the form's `action` attribute as a destination. The `action` attribute is required. 
 
-`required` attributes are used to denote a field's requiredness. However ReptileForms will use custom validation and will remove them by default. This can be overriden.
+`required` attributes are used to denote a field's requiredness. However ReptileForms will use custom validation and will remove them by default. This can be overridden.
 
 ## Events
 It's your world, we just live in it. ReptileForms has no opinions on how you should handle errors, successes, and other events. The following events can be hooked into with callbacks to provide you with ultimate flexibility:
