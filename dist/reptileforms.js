@@ -97,8 +97,8 @@
 		self.settings = $.extend(true, {
 			xhr: true,
 			expressions: {
-				'email': {'rule':'/^[a-zA-Z0-9._-]+@[\.a-zA-Z0-9-]+\.[a-zA-Z.]{2,5}$/','msg':'Invalid Email.'},
-				'password': {'rule':'/^[\040-\176]{6,}$/','msg':'Invalid Password, Must be at least 6 characters.'}
+				'email': {'rule':/^[a-zA-Z0-9._-]+@[\.a-zA-Z0-9-]+\.[a-zA-Z.]{2,5}$/,'msg':'Invalid Email.'},
+				'password': {'rule':/^[\040-\176]{6,}$/,'msg':'Invalid Password, Must be at least 6 characters.'}
 			}
 		}, s);
 
@@ -358,7 +358,8 @@
 			var expName = formField.data('exp-name');
 			if (expName && self.settings.expressions) { 
 				var expression = self.settings.expressions[expName];
-				if (expression && expression.rule && !eval(expression.rule).test(value)) {
+				var rule = (typeof expression.rule == 'string') ? eval(expression.rule) : expression.rule;
+				if (expression && expression.rule && !rule.test(value)) {
 					self.addError(name, title, expression.msg);
 				}
 			}

@@ -17,7 +17,7 @@
 		// can be applied to fields via data-exp-name attributes
 		var form = new ReptileForm('form', {
 			expressions: {
-				'zip': {'rule': '/^[0-9]{5}$/', 'msg': 'Invalid Zip Code'}
+				'zip': {'rule': /^[0-9]{5}$/, 'msg': 'Invalid Zip Code'}
 			}
 		});
 
