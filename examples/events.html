@@ -13,7 +13,7 @@
 
 		var form = new ReptileForm('form');
 
-		// Do Something Before Validation Starts
+		// Do something before validation starts
 		form.on('beforeValidation', function() {
 			$('body').append('<p>Before Validation</p>');
 		});
@@ -23,20 +23,18 @@
 			$('body').append('<p>Errors: ' + JSON.stringify(err) + '</p>');
 		});
 
-		// Do something after validation has occured but before the form
-		// submits. The 'this' keyword is a reference to the ReptileForm
-		// object which gives us access to getValues()
+		// Do something after validation is successful, but before the form submits.
 		form.on('beforeSubmit', function() {
 			$('body').append('<p>Sending Values: ' + JSON.stringify(this.getValues()) + '</p>');
 		});
 
 		// Do something when the AJAX request has returned in success
-		form.on('submitSuccess', function(e, data) {
+		form.on('xhrSuccess', function(e, data) {
 			$('body').append('<p>Received Data: ' + JSON.stringify(data) + '</p>');
 		});
 
 		// Do something when the AJAX request has returned with an error
-		form.on('submitError', function(e, xhr, settings, thrownError) {
+		form.on('xhrError', function(e, xhr, settings, thrownError) {
 			$('body').append('<p>Submittion Error</p>');
 		});
 

@@ -102,10 +102,10 @@
 					url: url,
 					data: formValues,
 					success: function(data) {
-						$(rf).trigger('submitSuccess', data);
+						$(rf).trigger('xhrSuccess', data);
 					},
 					error: function(xhr, settings, thrownError) {
-						$(rf).trigger('submitError', xhr, settings, thrownError);
+						$(rf).trigger('xhrError', xhr, settings, thrownError);
 					}
 				});
 			}

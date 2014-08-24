@@ -30,8 +30,8 @@
 			$('body').append('<p>Sending Values: ' + JSON.stringify(this.getValues()) + '</p>');
 		});
 
-		// Submit Success
-		form.on('submitSuccess', function(e, data) {
+		// XHR (AJAX) Success
+		form.on('xhrSuccess', function(e, data) {
 			$('body').append('<p>Received Data: ' + JSON.stringify(data) + '</p>');
 		});
 
