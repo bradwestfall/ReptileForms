@@ -104,7 +104,7 @@ Each callback will have access to the ReptileForm object via `this` keyword. Com
 - `getValues()`
 
 ## Custom Fields
-ReptileForms was created so making custom fields is easy. Compared to standard fields where ReptileForms will create containers for your fields - with custom fields you create the `field-input` container as follows:
+ReptileForms was created so making custom fields is easy. Compared to standard fields where ReptileForms will create containers for your fields - with custom fields you create the `field-input` manually to indicate a custom field:
 
 ###Initial HTML
 ```html
