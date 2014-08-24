@@ -73,6 +73,16 @@
 	}
 
 	/**
+	 * Apply custom submit functionality
+	 */
+	ReptileForm.prototype.submit = function(cb) {
+		$(this.forms).each(function() {
+			var rf = $(this).data('rf');
+			rf.submit = cb;
+		});
+	}
+
+	/**
 	 * Reptile Form
 	 */
 	rf = function(el, s) {
@@ -92,22 +102,6 @@
 			expressions: {
 				"email": {"rule":"\/^[a-zA-Z0-9._-]+@[\\.a-zA-Z0-9-]+\\.[a-zA-Z.]{2,5}$\/","msg":"Invalid Email."},
 				"password": {"rule":"\/^[\\040-\\176]{6,30}$\/","msg":"Invalid Password, Must be between 6 and 30 characters."}
-			},
-			submitForm: function(url, formValues) {
-				var rf = this;
-				$.ajax({
-					cache: false,
-					type: 'POST',
-					dataType: 'JSON',
-					url: url,
-					data: formValues,
-					success: function(data) {
-						$(rf).trigger('xhrSuccess', data);
-					},
-					error: function(xhr, settings, thrownError) {
-						$(rf).trigger('xhrError', xhr, settings, thrownError);
-					}
-				});
 			}
 		}, s);
 
@@ -137,7 +131,7 @@
 		});
 		
 		// Handle Submit Form
-		self.el.on('submit', function() {
+		self.el.on('submit', function(e) {
 
 			// Before Validation
 			$(self).trigger('beforeValidation');
@@ -152,8 +146,7 @@
 				$(self).trigger('beforeSubmit');
 
 				// Submit Form
-				self.settings.submitForm.call(self, self.el.attr('action'), self.getValues());
-				return false;
+				return self.submit(self.el.attr('action'), self.getValues());
 
 			// Validation Failed
 			} else {
@@ -165,9 +158,26 @@
 
 	}
 
-	/***********************************
-	  RENDER
-	************************************/
+	/**
+	 * Submit Method
+	 */
+	rf.prototype.submit = function(url, formValues) {
+		var self = this;
+		$.ajax({
+			cache: false,
+			type: 'POST',
+			dataType: 'JSON',
+			url: url,
+			data: formValues,
+			success: function(data) {
+				$(self).trigger('xhrSuccess', data);
+			},
+			error: function(xhr, settings, thrownError) {
+				$(self).trigger('xhrError', xhr, settings, thrownError);
+			}
+		});
+		return false;
+	}
 
 	/**
 	 * Render Field
@@ -308,13 +318,8 @@
 
 	}
 
-
-	/***********************************
-	  VALIDATION
-	************************************/
-
 	/**
-	 * Validate
+	 * Valid Form
 	 */
 	rf.prototype.validForm = function(form) {
 		
@@ -393,10 +398,6 @@
 		return value;
 
 	}
-
-	/***********************************
-	  FORM VALUES AND ERRORS
-	************************************/
 
 	rf.prototype.addError = function(name, title, msg) {
 		this.formErrors.push({'name': name, 'title': title, 'msg': msg});

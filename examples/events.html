@@ -29,6 +29,11 @@
 			$('body').append('<p>Sending Values: ' + JSON.stringify(this.getValues()) + '</p>');
 		});
 
+		// form.submit(function(url, formValues) {
+		// 	console.log('new submit');
+		// 	return true;
+		// });
+
 		// Do something when the AJAX request has returned in success
 		form.on('xhrSuccess', function(e, data) {
 			$('body').append('<p>Received Data: ' + JSON.stringify(data) + '</p>');
@@ -46,7 +51,7 @@
 <body>
 
 	<p>This page documents all available event emitters. See the code for more details.</p>
-	<form action="response.json">
+	<form class="reptile-form" action="response.json">
 		<input type="text" name="first_name" title="First Name" required>
 		<input type="text" name="last_name" title="Last Name" required>
 		<button type="submit">Submit</button>
