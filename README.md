@@ -75,7 +75,7 @@ By default, ReptileForms has two expressions in the list named: `email` and `pas
 // Setting can be overridden as follows:
 var form = new ReptileForm('form', {
 	expressions: {
-		'zip': {'rule': /^[0-9]{5}$/, 'msg': 'Invalid Zip Code'}
+		zip: {rule: /^[0-9]{5}$/, msg: 'Invalid Zip Code'}
 	}
 });
 ```
