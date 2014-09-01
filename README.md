@@ -70,12 +70,12 @@ var form = new ReptileForm('form', {
 
 ReptileForms allows developers to submit their own list of regular expressions. Each Expression will have a name, a message for errors, and a regular expression rule.
 
-By default, ReptileForms has two expressions in the list named: `email` and `password`. The list of regular expressions can be modified as follows:
+By default, ReptileForms has three expressions in the list named: `number`, `email` and `password`. The list of regular expressions can be modified as follows:
 ```js
 // Setting can be overridden as follows:
 var form = new ReptileForm('form', {
 	expressions: {
-		zip: {rule: /^[0-9]{5}$/, msg: 'Invalid Zip Code'}
+		zip: {rule: /^\d{5}$/, msg: 'Invalid Zip Code'}
 	}
 });
 ```
