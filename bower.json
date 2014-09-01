@@ -12,9 +12,7 @@
   "ignore": [
     "**/.*",
     "node_modules",
-    "vendors",
-    "test",
-    "tests"
+    "src"
   ],
   "dependencies": {
     "jquery": "~2.1.1"

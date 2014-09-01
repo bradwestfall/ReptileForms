@@ -97,6 +97,7 @@
 		self.settings = $.extend(true, {
 			xhr: true,
 			expressions: {
+				'number': {'rule': /^\d+$/, 'msg':'Invalid Number'},
 				'email': {'rule':/^[a-zA-Z0-9._-]+@[\.a-zA-Z0-9-]+\.[a-zA-Z.]{2,5}$/,'msg':'Invalid Email.'},
 				'password': {'rule':/^[\040-\176]{6,}$/,'msg':'Invalid Password, Must be at least 6 characters.'}
 			}
@@ -346,7 +347,7 @@
 			self.storeValue(name, value);
 
 			// Validate Requiredness
-			if (!formField.data('required') && value == null) {
+			if (!formField.data('required') && !value) {
 				return;
 
 			} else if (formField.data('required') && !value) {
@@ -356,7 +357,11 @@
 
 			// Validate Expression Rule
 			var expName = formField.data('exp-name');
-			if (expName && self.settings.expressions) { 
+			if (expName && self.settings.expressions) {
+				if (!self.settings.expressions[expName]) {
+					console.error('Expresion: \'' + expName + '\' has not been added to ReptileForms expressions')
+					return false;
+				}
 				var expression = self.settings.expressions[expName];
 				var rule = (typeof expression.rule == 'string') ? eval(expression.rule) : expression.rule;
 				if (expression && expression.rule && !rule.test(value)) {
