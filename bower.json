@@ -11,8 +11,7 @@
   "license": "MIT",
   "ignore": [
     "**/.*",
-    "node_modules",
-    "src"
+    "node_modules"
   ],
   "dependencies": {
     "jquery": "~2.1.1"
