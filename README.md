@@ -75,7 +75,7 @@ By default, ReptileForms has two expressions in the list named: `email` and `pas
 // Setting can be overridden as follows:
 var form = new ReptileForm('form', {
 	expressions: {
-		'zip': {'rule': /^[0-9]{5}$/, 'msg': 'Invalid Zip Code'}
+		zip: {rule: /^[0-9]{5}$/, msg: 'Invalid Zip Code'}
 	}
 });
 ```
@@ -91,7 +91,9 @@ To apply a regular expression to a field in your form, use the `data-exp-name` a
 	
 	<!-- Developer supplied expression for 'zip' -->
 	<input type="text" name="zip" title="Zip" required data-exp-name="zip" max-length="5">
+	
 	<button type="submit">Submit</button>
+	
 </form>
 ```
 > Note that for good UX, you should probably also provide `max-length` attributes where nessesary
