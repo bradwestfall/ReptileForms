@@ -12,7 +12,7 @@
 	<script>
 	$(function() {
 
-		var form = new ReptileForm('form');
+		var form = new ReptileForm('.reptile-form');
 
 	});
 	</script>
@@ -21,9 +21,9 @@
 <body>
 
 	<p>Note: This form has the bare-minimum configurations and does not
-	give any indication successes or errors. It does submit, however, via AJAX
+	give any indication successes or errors. It does submit however, via AJAX
 	which you can monitor in your Network Console</p>
-	<form action="response.json">
+	<form class="reptile-form" action="response.json">
 		<input type="text" name="first_name" title="First Name" required>
 		<input type="text" name="last_name" title="Last Name" required>
 		<button type="submit">Submit</button>

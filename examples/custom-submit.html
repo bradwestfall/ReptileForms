@@ -20,10 +20,10 @@
 		});
 
 		// Custom Submit
-		form.submit(function(url, formValues) {
+		form.submit = function(url, formValues) {
 			$('body').append('<p>Custom Submit</p>');
 			return false;
-		});
+		};
 
 	});
 	</script>

@@ -1,95 +1,13 @@
 !(function($, window, document, undefined) {
-	
-	/**
-	 * Start Reptile Form Objects
-	 */
-	ReptileForm = function(forms, settings) {
-		
-		// Set Form Objects 
-		this.forms = forms;
-		$(forms).each(function() {
-			$(this).data('rf', new rf(this, settings));
-		});
-
-		/**
-		 * Radio Group
-		 */
-		this.customValidation('validateRadioGroup', function(formField) {
-
-			// Get Value
-			var value = formField.find('input:checked').val();
-
-			// Field Name
-			var name = formField.data('name');
-
-			// If no value is selected
-			if (formField.data('required') && !value) this.addError(name, formField.data('title'), 'Value Is Required');
-			
-			// Return Value
-			return value;
-
-		});
-
-		/**
-		 * Checkbox Group
-		 */
-		this.customValidation('validateCheckboxGroup', function(formField) {
-
-			// Collect Values
-			var values = $('input[type="checkbox"]:checked').map(function(){
-				return $(this).val();
-			}).get();
-
-			// Field Name
-			var name = formField.data('name');
-
-			// If no value is selected
-			if (formField.data('required') && !values.length) this.addError(name, formField.data('title'), 'Value Is Required');
-		
-			// Return Values
-			return values;
-
-		});
-
-	}
-	
-	/**
-	 * Register Custom Validation
-	 */
-	ReptileForm.prototype.customValidation = function(f, cb) {
-		$(this.forms).each(function() {
-			$(this).data('rf').customValidation[f] = cb;
-		});
-	}
-
-	/**
-	 * Register Event Emitter
-	 */
-	ReptileForm.prototype.on = function(e, cb) {
-		$(this.forms).each(function() {
-			var rf = $(this).data('rf');
-			$(rf).on(e, cb);
-		});
-	}
-
-	/**
-	 * Apply custom submit functionality
-	 */
-	ReptileForm.prototype.submit = function(cb) {
-		$(this.forms).each(function() {
-			var rf = $(this).data('rf');
-			rf.submit = cb;
-		});
-	}
 
 	/**
 	 * Reptile Form
 	 */
-	rf = function(el, s) {
+	ReptileForm = function(el, s) {
 
 		// Setup
 		var self = this;
-		self.customValidation = [];
+		self.customValidationFunctions = [];
 		self.el = $(el);
 		if (!self.el.length) return false;
 	
@@ -147,18 +65,73 @@
 
 			// Validation Failed
 			} else {
+
 				$(self).trigger('validationError', [self.getErrors()]);
 				return false;
 			}
 
 		});
 
+		/**
+		 * Custom Validation
+		 */
+		self.customValidation = function(name, cb) {
+			this.customValidationFunctions[name] = cb;
+		}
+
+		/**
+		 * Radio Group
+		 */
+		self.customValidation('validateRadioGroup', function(formField, error) {
+
+			// Get Value
+			var value = formField.find('input:checked').val();
+
+			// Field Name
+			var name = formField.data('name');
+
+			// If no value is selected
+			if (formField.data('required') && !value) error('Value Is Required');
+			
+			// Return Value
+			return value;
+
+		});
+
+		/**
+		 * Checkbox Group
+		 */
+		self.customValidation('validateCheckboxGroup', function(formField) {
+
+			// Collect Values
+			var values = $('input[type="checkbox"]:checked').map(function(){
+				return $(this).val();
+			}).get();
+
+			// Field Name
+			var name = formField.data('name');
+
+			// If no value is selected
+			if (formField.data('required') && !values.length) error('Value Is Required');
+		
+			// Return Values
+			return values;
+
+		});		
+
+	}
+
+	/**
+	 * Register Event Emitter
+	 */
+	ReptileForm.prototype.on = function(e, cb) {
+		$(this).on(e, cb);
 	}
 
 	/**
 	 * Submit Method
 	 */
-	rf.prototype.submit = function(url, formValues) {
+	ReptileForm.prototype.submit = function(url, formValues) {
 		var self = this;
 		$.ajax({
 			cache: false,
@@ -179,7 +152,7 @@
 	/**
 	 * Render Field
 	 */
-	rf.prototype.renderField = function(originalField) {
+	ReptileForm.prototype.renderField = function(originalField) {
 		
 		// Setup
 		var self = this;
@@ -231,7 +204,7 @@
 	/**
 	 * Render Custom Field
 	 */
-	rf.prototype.renderCustomField = function(originalField) {
+	ReptileForm.prototype.renderCustomField = function(originalField) {
 		
 		// Setup
 		var self = this;
@@ -290,7 +263,7 @@
 	/**
 	 * Render Field Hidden
 	 */
-	rf.prototype.renderHiddenField = function(field) {
+	ReptileForm.prototype.renderHiddenField = function(field) {
 		
 		// Setup
 		var self = this;
@@ -318,7 +291,7 @@
 	/**
 	 * Valid Form
 	 */
-	rf.prototype.validForm = function(form) {
+	ReptileForm.prototype.validForm = function(form) {
 		
 		// Setup
 		var self = this;
@@ -335,9 +308,9 @@
 			var name = formField.data('name');
 
 			// Custom Validation
-			var customValidation = formField.data('custom-validation');
-			if (customValidation && $.isFunction(self.customValidation[customValidation])) {
-				value = self.customValidation[customValidation].call(self, formField, function(message) {
+			var customValidationName = formField.data('custom-validation');
+			if (customValidationName && $.isFunction(self.customValidationFunctions[customValidationName])) {
+				value = self.customValidationFunctions[customValidationName].call(self, formField, function(message) {
 					self.addError(name, title, message);
 				});
 				self.storeValue(name, value);
@@ -380,7 +353,7 @@
 	/**
 	 * Get Field Value
 	 */
-	rf.prototype.getFieldValue = function(formField) {
+	ReptileForm.prototype.getFieldValue = function(formField) {
 
 		// Field Name
 		var name = formField.data('name');
@@ -398,27 +371,27 @@
 
 	}
 
-	rf.prototype.addError = function(name, title, msg) {
+	ReptileForm.prototype.addError = function(name, title, msg) {
 		this.formErrors.push({'name': name, 'title': title, 'msg': msg});
 	}
 
-	rf.prototype.clearErrors = function() {
+	ReptileForm.prototype.clearErrors = function() {
 		this.formErrors = [];
 	}
 
-	rf.prototype.getErrors = function() {
+	ReptileForm.prototype.getErrors = function() {
 		return this.formErrors;
 	}
 
-	rf.prototype.storeValue = function(name, value) {
+	ReptileForm.prototype.storeValue = function(name, value) {
 		this.formValues[name] = value;
 	}
 
-	rf.prototype.clearValues = function() {
+	ReptileForm.prototype.clearValues = function() {
 		this.formValues = {};
 	}
 
-	rf.prototype.getValues = function() {
+	ReptileForm.prototype.getValues = function() {
 		return this.formValues;
 	}
 	
