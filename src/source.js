@@ -337,7 +337,9 @@
 			// Custom Validation
 			var customValidation = formField.data('custom-validation');
 			if (customValidation && $.isFunction(self.customValidation[customValidation])) {
-				value = self.customValidation[customValidation].call(self, formField);
+				value = self.customValidation[customValidation].call(self, formField, function(message) {
+					self.addError(name, title, message);
+				});
 				self.storeValue(name, value);
 				return;
 			}

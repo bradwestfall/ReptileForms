@@ -37,10 +37,10 @@
 
 		// Custom Validation for "terms". Note that you will need to return
 		// the value of your custom field.
-		form.customValidation('validateTerms', function(formField) {
+		form.customValidation('validateTerms', function(formField, error) {
 			var selected = true
 			if (!formField.find('.selected').length) {
-				this.addError('Terms', 'You must agree to terms');
+				error('You must agree to terms');
 				selected = false;
 			}
 			return selected;
