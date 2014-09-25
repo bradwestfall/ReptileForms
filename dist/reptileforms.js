@@ -338,7 +338,7 @@
 					return false;
 				}
 				var expression = self.settings.expressions[expName];
-				var rule = (typeof expression.rule == 'string') ? eval(expression.rule) : expression.rule;
+				var rule = new RegExp(expression.rule);
 				if (expression && expression.rule && !rule.test(value)) {
 					self.addError(name, title, expression.msg);
 				}
