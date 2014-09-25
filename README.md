@@ -173,13 +173,13 @@ Custom fields also require custom validation written by you. As you can see from
 ```js
 var form = new ReptileForm();
 
-form.customValidation('validateTerms', function(formField) {
+form.customValidation('validateTerms', function(formField, error) {
 	// Notice that the first parameter we will give you (formField) is a jQuery
 	// object referencing the .field node of your custom field. 
 	
 	// Here is where you will conduct your custom field's validation. If you found
 	// an error, log it with:
-	this.addError('Title', 'Error Message');
+	error('Error Message');
 	
 	// Always return a value, the value must be the custom field's value if any
 	return true;
