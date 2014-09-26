@@ -15,9 +15,11 @@
 		}
 
 		&.radio-group, &.checkbox-group {
-			& label {
-				margin-left: 5px;
+			.field-input > label {
 				margin-right: 5px;
+				input {
+					margin-right: 5px;
+				}
 			}
 		}
 
