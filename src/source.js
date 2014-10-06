@@ -16,7 +16,7 @@
 			xhr: true,
 			expressions: {
 				'number': {'rule': /^\d+$/, 'msg':'Invalid Number'},
-				'email': {'rule':/^[a-zA-Z0-9._-]+@[\.a-zA-Z0-9-]+\.[a-zA-Z.]{2,5}$/,'msg':'Invalid Email.'},
+				'email': {'rule':/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/,'msg':'Invalid Email.'},
 				'password': {'rule':/^[\040-\176]{6,}$/,'msg':'Invalid Password, Must be at least 6 characters.'}
 			}
 		}, s);
@@ -338,9 +338,11 @@
 					return false;
 				}
 				var expression = self.settings.expressions[expName];
-				var rule = new RegExp(expression.rule);
-				if (expression && expression.rule && !rule.test(value)) {
-					self.addError(name, title, expression.msg);
+				if (typeof expression.rule == 'string') {
+					if (!eval(expression.rule).test(value)) self.addError(name, title, expression.msg);
+				} else {
+					var regex = new RegExp(expression.rule);
+					if (!regex.test(value)) self.addError(name, title, expression.msg);
 				}
 			}
 			
