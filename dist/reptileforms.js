@@ -101,7 +101,7 @@
 		/**
 		 * Checkbox Group
 		 */
-		self.customValidation('validateCheckboxGroup', function(formField) {
+		self.customValidation('validateCheckboxGroup', function(formField, error) {
 
 			// Collect Values
 			var values = $('input[type="checkbox"]:checked').map(function(){
