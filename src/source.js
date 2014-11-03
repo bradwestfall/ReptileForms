@@ -14,6 +14,7 @@
 		// Settings
 		self.settings = $.extend(true, {
 			xhr: true,
+			action: self.el.attr('action') || window.location.pathname,
 			expressions: {
 				'number': {'rule': /^\d+$/, 'msg':'Invalid Number'},
 				'email': {'rule':/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/,'msg':'Invalid Email.'},
@@ -30,8 +31,7 @@
 
 		// Give the form a method and action if it doesn't have one
 		if (!self.el.attr('method') && self.settings.xhr) self.el.attr('method', 'POST');
-		if (!self.el.attr('action') && self.settings.xhr) console.error('ReptileForm: action attribue is required when in xhr mode');
-
+		
 		// Render Fields
 		self.el.children('input, select, textarea, .field-input').each(function() {
 			if ($(this).parents('.field').length) return false;
@@ -61,7 +61,7 @@
 				if (!self.settings.xhr) return true;
 
 				// Submit Form
-				return self.submit(self.el.attr('action'), self.getValues());
+				return self.submit(self.settings.action, self.getValues());
 
 			// Validation Failed
 			} else {
